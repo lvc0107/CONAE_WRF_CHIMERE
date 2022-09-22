@@ -1,6 +1,6 @@
 #
 FROM centos:latest
-MAINTAINER John Exby <exby@ucar.edu>
+MAINTAINER Miguel Vargas <lvc0107@protonmail.com>
 # 
 RUN curl -SL https://ral.ucar.edu/sites/default/files/public/projects/ncar-docker-wrf/ucar-bsd-3-clause-license.pdf > /UCAR-BSD-3-Clause-License.pdf
 #

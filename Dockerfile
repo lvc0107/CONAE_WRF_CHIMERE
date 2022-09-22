@@ -1,10 +1,10 @@
 #
 #FROM centos:latest - some users reported problems with yum
 FROM centos:7
-MAINTAINER Dave Gill <gill@ucar.edu>
+MAINTAINER Miguel Vargas <lvc0107@protonmail.com>
 
-ENV WRF_VERSION 4.0.3
-ENV WPS_VERSION 4.0.2
+ENV WRF_VERSION 3.7.1
+ENV WPS_VERSION 3.6.1
 ENV NML_VERSION 4.0.2
 
 # Set up base OS environment
@@ -36,9 +36,9 @@ ENV J 4
 RUN mkdir -p /wrf/libs/openmpi/BUILD_DIR
 RUN source /opt/rh/devtoolset-8/enable \
  && cd /wrf/libs/openmpi/BUILD_DIR \
- && curl -L -O https://download.open-mpi.org/release/open-mpi/v4.0/openmpi-4.0.0.tar.gz \
- && tar -xf openmpi-4.0.0.tar.gz \
- && cd openmpi-4.0.0 \
+ && curl -L -O https://download.open-mpi.org/release/open-mpi/v2.0/openmpi-2.0.4.tar.gz \
+ && tar -xf openmpi-2.0.4.tar.gz \
+ && cd openmpi-2.0.4 \
  && ./configure --prefix=/usr/local &> /wrf/libs/build_log_openmpi_config \
  && make all install &> /wrf/libs/build_log_openmpi_make \
  && cd / \
@@ -48,9 +48,10 @@ RUN source /opt/rh/devtoolset-8/enable \
 RUN mkdir -p /wrf/libs/hdf5/BUILD_DIR
 RUN source /opt/rh/devtoolset-8/enable \
  && cd /wrf/libs/hdf5/BUILD_DIR \
- && git clone https://bitbucket.hdfgroup.org/scm/hdffv/hdf5.git \
- && cd hdf5 \
- && git checkout hdf5-1_10_4 \
+ && curl -L -O https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.8/hdf5-1.8.20/src/hdf5-1.8.20.tar.gz \
+ && tar -xvf hdf5-1.8.20.tar.gz \
+ && cd hdf5-1.8.20 \
+ && make clean \
  && ./configure --enable-fortran --enable-cxx --prefix=/usr/local/ &> /wrf/libs/build_log_hdf5_config \
  && make install &> /wrf/libs/build_log_hdf5_make \
  && rm -rf /wrf/libs/hdf5/BUILD_DIR
@@ -88,7 +89,9 @@ RUN mkdir -p  /wrf/WPS_GEOG /wrf/wrfinput /wrf/wrfoutput \
  &&  chmod 6755 /wrf /wrf/WPS_GEOG /wrf/wrfinput /wrf/wrfoutput /usr/local
 
 # Download NCL
-RUN curl -SL https://ral.ucar.edu/sites/default/files/public/projects/ncar-docker-wrf/nclncarg-6.3.0.linuxcentos7.0x8664nodapgcc482.tar.gz | tar zxC /usr/local
+#RUN curl -SL https://ral.ucar.edu/sites/default/files/public/projects/ncar-docker-wrf/nclncarg-6.3.0.linuxcentos7.0x8664nodapgcc482.tar.gz | tar zxC /usr/local
+# from here: https://www.earthsystemgrid.org/dataset/ncl.630.2/file.html
+RUN curl -SL  https://www.earthsystemgrid.org/api/v1/dataset/ncl.630.2/file/ncl_ncarg-6.3.0.tar.gz | tar zxC /usr/local
 ENV NCARG_ROOT /usr/local
 
 # Set environment for interactive container shells
@@ -119,9 +122,10 @@ WORKDIR /wrf
 ARG argname=tutorial
 RUN echo DAVE $argname
 RUN if [ "$argname" = "tutorial" ] ; then curl -SL http://www2.mmm.ucar.edu/wrf/src/wps_files/geog_low_res_mandatory.tar.gz | tar -xzC /wrf/WPS_GEOG ; fi
-RUN if [ "$argname" = "tutorial" ] ; then curl -SL http://www2.mmm.ucar.edu/wrf/TUTORIAL_DATA/colorado_march16.new.tar.gz | tar -xzC /wrf/wrfinput ; fi
+#RUN if [ "$argname" = "tutorial" ] ; then curl -SL http://www2.mmm.ucar.edu/wrf/TUTORIAL_DATA/colorado_march16.new.tar.gz | tar -xzC /wrf/wrfinput ; fi
+RUN if [ "$argname" = "tutorial" ] ; then curl -SL https://www2.mmm.ucar.edu/wrf/TUTORIAL_DATA/colorado_march16.tar.gz | tar -xzC /wrf/wrfinput ; fi
 RUN if [ "$argname" = "tutorial" ] ; then curl -SL http://www2.mmm.ucar.edu/wrf/src/namelists_v$NML_VERSION.tar.gz  | tar -xzC /wrf/wrfinput ; fi
-RUN if [ "$argname" = "tutorial" ] ; then curl -SL http://www2.mmm.ucar.edu/wrf/TUTORIAL_DATA/WRF_NCL_scripts.tar.gz | tar -xzC /wrf ; fi
+#RUN if [ "$argname" = "tutorial" ] ; then curl -SL http://www2.mmm.ucar.edu/wrf/TUTORIAL_DATA/WRF_NCL_scripts.tar.gz | tar -xzC /wrf ; fi
 RUN if [ "$argname" = "regtest" ]  ; then curl -SL http://www2.mmm.ucar.edu/wrf/dave/DATA/Data_small/data_SMALL.tar.gz | tar -xzC /wrf ; fi
 RUN if [ "$argname" = "regtest" ]  ; then curl -SL http://www2.mmm.ucar.edu/wrf/dave/nml.tar.gz | tar -xzC /wrf ; fi
 RUN if [ "$argname" = "regtest" ]  ; then curl -SL http://www2.mmm.ucar.edu/wrf/dave/script.tar | tar -xC /wrf ; fi
