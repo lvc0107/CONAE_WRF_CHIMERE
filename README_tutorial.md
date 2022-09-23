@@ -16,25 +16,15 @@ https://docs.docker.com/docker-for-windows/install/
 
 The NCAR WRF Tutorial staff cannot assist you with this installation. We are not permitted to work on any laptop from a tutorial attendee.
 
-Once you have docker installed, make sure it is working by trying the "hello world" program.
-```
-docker    run    hello-world
-```
-
-If this works, you get a short "Hello from Docker!" message, something like below:
-```
-   Hello from Docker!
-   This message shows that your installation appears to be working correctly.
-```
 
 #### Building a WRF Docker Container ####
 
 Now that we have docker working on your machine, we use the two WRF-supplied files: Dockerfile and default-mca-params.conf. They are both text files, so feel free to peek inside to see what they are doing. The Dockerfile, the bigger file, sets up the whole environment within the container: directories, compiler versions, environment variables, lots of libraries, netcdf, MPI, WRF and WPS source code, WPS_GEOG data, grib2 data - _EVERYTHING_. The smaller file contains some information to allow openmpi to run on multiple cores.
 
-There are docker _images_ and docker _containers_. We first need to construct the docker image. From that fixed image, we can make containers, as many as we want (or as many as the machine can hold). To generate our WRF container, we first need to build our image. To construct the docker image, we use the `docker build` command, and that command automatically uses the two supplied files. Therefore, both the Dockerfile and the configuration file need to be in the current directory when you issue this `docker build` command.  The `argname=tutorial` option sends information to the Dockerfile regarding what files to download. And _YES_, there really is a period at the end of the following command, and it is really important! 
+There are docker _images_ and docker _containers_. We first need to construct the docker image. From that fixed image, we can make containers, as many as we want (or as many as the machine can hold). To generate our WRF container, we first need to build our image. To construct the docker image, we use the `docker build` command, and that command automatically uses the two supplied files. Therefore, both the Dockerfile and the configuration file need to be in the current directory when you issue this `docker build` command. 
 
 ```
-docker   build   -t   wrf_tutorial   --build-arg argname=tutorial   .
+docker build -t wrf_chimere .
 ```
 
 This command takes a few minutes (on my 4 year old Mac at home it takes 4.5 minutes, at work with faster internet it takes 3 minutes). Quite a few files are downloaded, so you might want to issue this container `docker build` command when using a reasonable network. For example, NOT with lots of your best friends at the same time at a WRF Tutorial on a guest network. This command would be much better processed at your home institution where you have a fast internet connection. After that, maybe at your hotel would work, but only maybe.
@@ -43,22 +33,22 @@ This command takes a few minutes (on my 4 year old Mac at home it takes 4.5 minu
 
 Now we want to get INTO that container that we have just built. When we issue the following `docker run` command (takes a few seconds to do), note that your command line prompt changes after you issue this command:
 ```
-docker   run   -it   --name   teachme   wrf_tutorial   /bin/tcsh
+docker run -it --name wrf_chi_container1 wrf_chimere /bin/tcsh
 ```
 
-You are now in _CONTAINER LAND_. You are running an instance of the "wrf_tutorial" container (we just built it above). We could "run" the container externally, but we prefer that introductory students interact with the source code interactively from within the container. You have named your container instance "teachme". Your default shell is /bin/tcsh, which you could easily switch to /bin/bash from the docker command.
+You are now in _CONTAINER LAND_. You are running an instance of the "wrf_chimere" image (we just built it above). We could "run" the container externally, but we prefer that introductory students interact with the source code interactively from within the container. You have named your container instance "wrf_chi_container1". Your default shell is /bin/tcsh, which you could easily switch to /bin/bash from the docker command.
 
 When you do an `ls -ls` from within the container, you see something like:
 ```
 [wrfuser@efee06a6d22f ~]$ ls -ls
-total 24
-4 drwxr-sr-x  2 wrfuser wrf 4096 Nov 30 20:52 netcdf_links
-4 drwxr-sr-x  7 wrfuser wrf 4096 Nov 10 00:13 WPS
-4 drwsr-sr-x 31 wrfuser wrf 4096 Nov 30 20:51 WPS_GEOG
-4 drwxr-sr-x 22 wrfuser wrf 4096 Nov  9 23:55 WRF
-4 drwsr-sr-x  2 wrfuser wrf 4096 Nov 30 20:52 wrfinput
-4 drwxr-sr-x  3 wrfuser wrf 4096 Jan 22  2014 WRF_NCL_scripts
-0 drwxr-xr-x  2 wrfuser wrf   68 Nov 30 20:57 wrfoutput
+total 28
+4 drwxr-sr-x  9 wrfuser wrf 4096 Sep 22 23:30 WPS
+4 drwsr-sr-x  3 wrfuser wrf 4096 Sep 22 23:30 WPS_GEOG
+4 drwxr-sr-x 22 wrfuser wrf 4096 Sep 22 23:31 WRF
+4 drwxr-sr-x  2 wrfuser wrf 4096 Sep 22 00:17 davegill
+4 drwxr-sr-x  5 wrfuser wrf 4096 Sep 22 23:31 libs
+4 drwsr-sr-x  2 wrfuser wrf 4096 Sep 22 23:31 wrfinput
+4 drwsr-sr-x  2 wrfuser wrf 4096 Sep 21 23:11 wrfoutput
 ```
 
 The WPS source code (WPS directory), the WRF source code (WRF directory), the WPS geographic/static data (WPS_GEOG), and the GRIB2 data (wrfinput directory) are all here. Also, the namelists for the tutorial case that are consistent with the grib data are included in the wrfinput directory. There is quite a bit of data in this container which is why we recommend that you issue the `docker build` command in a location with a fast internet.
@@ -69,8 +59,8 @@ For this first example, do not be afraid. You cannot break anything, even if you
 
 For example, from within the container, we type `exit`. That pops us back out to the host OS. From there, we remove the existing (currently stopped) instance with the `docker rm` command, and then just type the `docker run` command.
 ```
-docker    rm     teachme
-docker   run  -it  --name   teachme  wrf_tutorial   /bin/tcsh
+docker rm wrf_chi_container1
+docker run -it --name wrf_chi_container1 wrf_chimere /bin/tcsh
 ```
 
 #### START TO BUILD AND RUN THE WRF SYSTEM ####
@@ -83,7 +73,7 @@ So far we have built our image (the `docker build` step), we have gone in and ou
 2. Build the WRF code
    * cd to the WRF directory, build WRF  
      NOTE: Just to be safe, usually a good idea when starting a new build  
-     NOTE: select build option "34" (GNU with DM parallelism), and choose nesting option "1" (which is just regular, non-moving nests)  
+     NOTE: select build option "35" (GNU (gfortran/gcc)), and choose nesting option "1" (which is just regular, non-moving nests)  
      NOTE: takes about 9 minutes on my laptop
 ```
     ./clean -a
@@ -93,10 +83,10 @@ So far we have built our image (the `docker build` step), we have gone in and ou
 
 ```
     ls -ls main/*.exe
-     41580 -rwxr-xr-x 1 wrfuser wrf 42574576 Nov 30 21:09 main/ndown.exe
-     41436 -rwxr-xr-x 1 wrfuser wrf 42427024 Nov 30 21:09 main/real.exe
-     40952 -rwxr-xr-x 1 wrfuser wrf 41931864 Nov 30 21:09 main/tc.exe
-     45888 -rwxr-xr-x 1 wrfuser wrf 46988104 Nov 30 21:08 main/wrf.exe
+    42072 -rwxr-xr-x 1 wrfuser wrf 43081112 Sep 22 23:51 main/ndown.exe
+    41948 -rwxr-xr-x 1 wrfuser wrf 42954128 Sep 22 23:51 main/real.exe
+    41488 -rwxr-xr-x 1 wrfuser wrf 42483536 Sep 22 23:51 main/tc.exe
+    45968 -rwxr-xr-x 1 wrfuser wrf 47068016 Sep 22 23:50 main/wrf.exe
 ```
 
 2. Build the WPS, configure
@@ -106,13 +96,13 @@ So far we have built our image (the `docker build` step), we have gone in and ou
     ./configure
 ```
 3. Build the WPS, tweaks for the configure script
-   * NOTE: edit the configure.wps, add "-lnetcdff" to the line that has "-lnetcdf", and the libraries have to be in the correct order  
+   * NOTE: edit the configure.wps, add "-lnetcdff" and "-lgomp" flags to the line that has "-lnetcdf", and the libraries have to be in the correct order  
    * Original line vs new line
 ```
                         -L$(NETCDF)/lib  -lnetcdf
 ```
 ```
-                        -L$(NETCDF)/lib  -lnetcdff -lnetcdf
+                        -L$(NETCDF)/lib  -lnetcdff -lnetcdf -lgomp
 ```
 4. Build the WPS, compile step
    * NOTE: takes 15 s on my laptop  
@@ -122,9 +112,9 @@ So far we have built our image (the `docker build` step), we have gone in and ou
 5. Build the WPS, Hey! we have executables!
 ```
     ls -ls *.exe
-    0 lrwxrwxrwx 1 wrfuser wrf 23 Nov 30 21:12 geogrid.exe -> geogrid/src/geogrid.exe
-    0 lrwxrwxrwx 1 wrfuser wrf 23 Nov 30 21:12 metgrid.exe -> metgrid/src/metgrid.exe
-    0 lrwxrwxrwx 1 wrfuser wrf 21 Nov 30 21:12 ungrib.exe -> ungrib/src/ungrib.exe
+    0 lrwxrwxrwx 1 wrfuser wrf 23 Sep 23 00:13 geogrid.exe -> geogrid/src/geogrid.exe
+    0 lrwxrwxrwx 1 wrfuser wrf 23 Sep 23 00:13 metgrid.exe -> metgrid/src/metgrid.exe
+    0 lrwxrwxrwx 1 wrfuser wrf 21 Sep 23 00:13 ungrib.exe -> ungrib/src/ungrib.exe
 ```
 6. Run WPS, small namelist changes
    * cd to the WPS directory (if you just built the code, you are THERE)
@@ -138,7 +128,7 @@ So far we have built our image (the `docker build` step), we have gone in and ou
      NOTE: takes about 3 seconds
 ```
       ls -ls geo_em.d01.nc 
-      2672 -rw-r--r-- 1 wrfuser wrf 2736012 Dec  3 19:35 geo_em.d01.nc
+      2672 -rw-r--r-- 1 wrfuser wrf 2736008 Sep 23 00:15 geo_em.d01.nc
 ```
 8. Run WPS, UNGRIB
    * ungrib requires the grib2 data and the correct Vtable
@@ -149,11 +139,11 @@ So far we have built our image (the `docker build` step), we have gone in and ou
      NOTE: takes about 2 seconds
 ```
       ls -ls FILE*
-      41272 -rw-r--r-- 1 wrfuser wrf 42261264 Nov 30 21:52 FILE:2016-03-23_00
-      41272 -rw-r--r-- 1 wrfuser wrf 42261264 Nov 30 21:52 FILE:2016-03-23_06
-      41272 -rw-r--r-- 1 wrfuser wrf 42261264 Nov 30 21:52 FILE:2016-03-23_12
-      41272 -rw-r--r-- 1 wrfuser wrf 42261264 Nov 30 21:52 FILE:2016-03-23_18
-      41272 -rw-r--r-- 1 wrfuser wrf 42261264 Nov 30 21:52 FILE:2016-03-24_00
+      41272 -rw-r--r-- 1 wrfuser wrf 42261264 Sep 23 00:17 FILE:2016-03-23_00
+      41272 -rw-r--r-- 1 wrfuser wrf 42261264 Sep 23 00:17 FILE:2016-03-23_06
+      41272 -rw-r--r-- 1 wrfuser wrf 42261264 Sep 23 00:17 FILE:2016-03-23_12
+      41272 -rw-r--r-- 1 wrfuser wrf 42261264 Sep 23 00:17 FILE:2016-03-23_18
+      41272 -rw-r--r-- 1 wrfuser wrf 42261264 Sep 23 00:17 FILE:2016-03-24_00
 ```
 9. Run WPS, METGRID
    * metgrid is usually able to run if both geogrid and ungrib mods to the namelist have been completed
@@ -161,11 +151,11 @@ So far we have built our image (the `docker build` step), we have gone in and ou
      NOTE: takes about 2 seconds
 ```
       ls -ls met_em.*
-      6728 -rw-r--r-- 1 wrfuser wrf 6888308 Dec  3 16:33 met_em.d01.2016-03-23_00:00:00.nc
-      6728 -rw-r--r-- 1 wrfuser wrf 6888308 Dec  3 16:33 met_em.d01.2016-03-23_06:00:00.nc
-      6728 -rw-r--r-- 1 wrfuser wrf 6888308 Dec  3 16:33 met_em.d01.2016-03-23_12:00:00.nc
-      6728 -rw-r--r-- 1 wrfuser wrf 6888308 Dec  3 16:33 met_em.d01.2016-03-23_18:00:00.nc
-      6728 -rw-r--r-- 1 wrfuser wrf 6888308 Dec  3 16:33 met_em.d01.2016-03-24_00:00:00.nc
+      6728 -rw-r--r-- 1 wrfuser wrf 6888304 Sep 23 00:17 met_em.d01.2016-03-23_00:00:00.nc
+      6728 -rw-r--r-- 1 wrfuser wrf 6888304 Sep 23 00:17 met_em.d01.2016-03-23_06:00:00.nc
+      6728 -rw-r--r-- 1 wrfuser wrf 6888304 Sep 23 00:18 met_em.d01.2016-03-23_12:00:00.nc
+      6728 -rw-r--r-- 1 wrfuser wrf 6888304 Sep 23 00:18 met_em.d01.2016-03-23_18:00:00.nc
+      6728 -rw-r--r-- 1 wrfuser wrf 6888304 Sep 23 00:18 met_em.d01.2016-03-24_00:00:00.nc
 ```
 
 10. Run Real, initial set up of files and namelist
@@ -188,13 +178,14 @@ So far we have built our image (the `docker build` step), we have gone in and ou
 12. run real, inspecting output
     * NOTE: look at the last line of the `rsl.out.0000` file:
 ```
-    d01 2016-03-24_00:00:00 real_em: SUCCESS COMPLETE REAL_EM INIT
+    tail rsl.out.0000
+    real_em: SUCCESS COMPLETE REAL_EM INIT
 ```
 13. Run real, there are some expected files 
 ```
     ls -ls wrfinput_d01 wrfbdy_d01 
-    20028 -rw-r--r-- 1 wrfuser wrf 20508248 Dec  3 16:39 wrfbdy_d01
-    15868 -rw-r--r-- 1 wrfuser wrf 16247624 Dec  3 16:39 wrfinput_d01
+    20028 -rw-r--r-- 1 wrfuser wrf 20508248 Sep 23 00:20 wrfbdy_d01
+    17224 -rw-r--r-- 1 wrfuser wrf 17636952 Sep 23 00:20 wrfinput_d01
 ```
 
 14. Run WRF
@@ -207,29 +198,30 @@ So far we have built our image (the `docker build` step), we have gone in and ou
 ```
 ```
     tail rsl.out.0000
-    Timing for main: time 2016-03-23_23:39:00 on domain   1:    0.30511 elapsed seconds
-    Timing for main: time 2016-03-23_23:42:00 on domain   1:    0.31809 elapsed seconds
-    Timing for main: time 2016-03-23_23:45:00 on domain   1:    0.30482 elapsed seconds
-    Timing for main: time 2016-03-23_23:48:00 on domain   1:    0.31682 elapsed seconds
-    Timing for main: time 2016-03-23_23:51:00 on domain   1:    0.30941 elapsed seconds
-    Timing for main: time 2016-03-23_23:54:00 on domain   1:    0.32885 elapsed seconds
-    Timing for main: time 2016-03-23_23:57:00 on domain   1:    0.31250 elapsed seconds
-    Timing for main: time 2016-03-24_00:00:00 on domain   1:    0.32680 elapsed seconds
-    Timing for Writing wrfout_d01_2016-03-24_00:00:00 for domain        1:    0.68972 elapsed seconds
-    d01 2016-03-24_00:00:00 wrf: SUCCESS COMPLETE WRF
+    Timing for main: time 2016-03-23_23:39:00 on domain   1:    0.50564 elapsed seconds
+    Timing for main: time 2016-03-23_23:42:00 on domain   1:    0.52519 elapsed seconds
+    Timing for main: time 2016-03-23_23:45:00 on domain   1:    0.44825 elapsed seconds
+    Timing for main: time 2016-03-23_23:48:00 on domain   1:    0.49791 elapsed seconds
+    Timing for main: time 2016-03-23_23:51:00 on domain   1:    0.52293 elapsed seconds
+    Timing for main: time 2016-03-23_23:54:00 on domain   1:    0.66335 elapsed seconds
+    Timing for main: time 2016-03-23_23:57:00 on domain   1:    0.66052 elapsed seconds
+    Timing for main: time 2016-03-24_00:00:00 on domain   1:    0.50748 elapsed seconds
+    Timing for Writing wrfout_d01_2016-03-24_00:00:00 for domain        1:    1.02812 elapsed seconds
+    wrf: SUCCESS COMPLETE WRF
+    [1]  + Done                          mpirun -np 3 ./wrf.exe
 ```
 15. Run WRF, expected files
 ```
     ls -ls wrfo*
-    18648 -rw-r--r-- 1 wrfuser wrf 19095444 Dec  3 19:49 wrfout_d01_2016-03-23_00:00:00
-    18648 -rw-r--r-- 1 wrfuser wrf 19095444 Dec  3 19:49 wrfout_d01_2016-03-23_03:00:00
-    18648 -rw-r--r-- 1 wrfuser wrf 19095444 Dec  3 19:50 wrfout_d01_2016-03-23_06:00:00
-    18648 -rw-r--r-- 1 wrfuser wrf 19095444 Dec  3 19:50 wrfout_d01_2016-03-23_09:00:00
-    18648 -rw-r--r-- 1 wrfuser wrf 19095444 Dec  3 19:50 wrfout_d01_2016-03-23_12:00:00
-    18648 -rw-r--r-- 1 wrfuser wrf 19095444 Dec  3 19:51 wrfout_d01_2016-03-23_15:00:00
-    18648 -rw-r--r-- 1 wrfuser wrf 19095444 Dec  3 19:52 wrfout_d01_2016-03-23_18:00:00
-    18648 -rw-r--r-- 1 wrfuser wrf 19095444 Dec  3 19:52 wrfout_d01_2016-03-23_21:00:00
-    18648 -rw-r--r-- 1 wrfuser wrf 19095444 Dec  3 19:53 wrfout_d01_2016-03-24_00:00:00
+    18648 -rw-r--r-- 1 wrfuser wrf 19095444 Sep 23 00:29 wrfout_d01_2016-03-23_00:00:00
+    18648 -rw-r--r-- 1 wrfuser wrf 19095444 Sep 23 00:30 wrfout_d01_2016-03-23_03:00:00
+    18648 -rw-r--r-- 1 wrfuser wrf 19095444 Sep 23 00:31 wrfout_d01_2016-03-23_06:00:00
+    18648 -rw-r--r-- 1 wrfuser wrf 19095444 Sep 23 00:31 wrfout_d01_2016-03-23_09:00:00
+    18648 -rw-r--r-- 1 wrfuser wrf 19095444 Sep 23 00:32 wrfout_d01_2016-03-23_12:00:00
+    18648 -rw-r--r-- 1 wrfuser wrf 19095444 Sep 23 00:33 wrfout_d01_2016-03-23_15:00:00
+    18648 -rw-r--r-- 1 wrfuser wrf 19095444 Sep 23 00:34 wrfout_d01_2016-03-23_18:00:00
+    18648 -rw-r--r-- 1 wrfuser wrf 19095444 Sep 23 00:35 wrfout_d01_2016-03-23_21:00:00
+    18648 -rw-r--r-- 1 wrfuser wrf 19095444 Sep 23 00:36 wrfout_d01_2016-03-24_00:00:00
 ```
 
 #### Example 2 ####
