@@ -231,7 +231,7 @@ If you have been able to get the model to run and produce the model output files
 To leave the container, simply type `exit`.  Now you are back in your hosting operating system - NOT in the container.  When you exit the first practice container (the container instance that had no external volume that was visible), make sure that you remove that instance first:
 
 ```
-docker   rm    teachme
+docker rm wrf_chi_container1
 ```
 For our second test, this new instance will be set up to allow us to move data between the host OS and CONTAINER LAND.
 
@@ -240,13 +240,13 @@ We built and ran the code, but we can't look at the data from within the contain
 We can "see" the container data from the outside (and also the outside from within the container) by setting up the "run" command on our instance a little differently. We have to add the `-v` option (i.e. volume, visible, etc). 
 
 ```
-docker run -it --name teachme -v _some_directory_absolute_path_on_my_laptop_:/wrf/wrfoutput wrf_tutorial /bin/tcsh
+docker run -it --name wrf_chi_container1 -v _some_directory_absolute_path_on_my_laptop_:/wrf/wrfoutput wrf_tutorial /bin/tcsh
 ```
 
 If you want a concrete example, put in a subdirectory called `OUTPUT` on your host OS platform, then use that directory as the shared volume:
 ```
 mkdir OUTPUT
-docker run -it --name teachme -v `pwd`/OUTPUT:/wrf/wrfoutput wrf_tutorial /bin/tcsh
+docker run -it --name wrf_chi_container1 -v `pwd`/OUTPUT:/wrf/wrfoutput wrf_chimere /bin/tcsh
 ```
 
 With the above `docker run` command, from within the container, anything that we place in the /wrf/wrfoutput directory is visible to the outside world (located in the explicitly defined directory on the left hand side of the ":"). Similarly, any files placed in the explicitly named local directory (the left hand side of the ":"), those files are visible within the container in the /wrf/wrfoutput directory (the directory listed on the right hand side of the ":"). Note that you can add more  "-v localpath:containerpath" entries to this `docker run` command to have even more shared volumes as visible.
@@ -272,7 +272,7 @@ If you are now starting test case 2, go to the top of these instructions and loo
     18648 -rw-r--r-- 1 wrfuser wrf 19095444 Dec  3 20:04 wrfout_d01_2016-03-23_21:00:00
     18648 -rw-r--r-- 1 wrfuser wrf 19095444 Dec  3 20:04 wrfout_d01_2016-03-24_00:00:00
 ```
-3. From outside of the container from from the native host OS (notice the different time zones and different block sizes, because in this example the host OS is Darwin and the container OS is Linux!).
+3. From outside of the container, from the native host OS (notice the different time zones and different block sizes, because in this example the host OS is Darwin and the container OS is Linux!).
 ```
     ls -ls OUTPUT
     total 335664
