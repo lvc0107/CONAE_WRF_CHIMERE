@@ -35,11 +35,13 @@ Chimere and its dependencies installed in the docker image are:
       4) `docker build --build-arg CHIMERE_USER=$CHIMERE_USER --build-arg CHIMERE_PASS=$CHIMERE_PASS -t chimere_conae .`
 2) Create container:
    1) `docker run -it --name chimere_container lvc0107/chimere_conae /bin/tcsh`
-   2) Run tests
-      1) `./chimere_v2020r3/chimere.sh` TODO complete
-   3) Check result in TODO complete
+   2) You can verify Chimere, WRF and WPS are successfully compiled by doing:
+      1) `cat ./chimere_v2020r3/build_log*`
+   3) Run tests: TODO COMPLETE
+      1) `./chimere_v2020r3/chimere.sh` TODO COMPLETE
+   4) Check result in TODO COMPLETE
    
-3) Run the model: TODO Complete
+3) Run the model: TODO COMPLETE
    1) `docker start chimere_container`
    2) `docker exec -it chimere_container /bin/tcsh`
    3) `./chimere_v2020r3/chimere.sh` TODO COMPLETE
