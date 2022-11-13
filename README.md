@@ -23,9 +23,9 @@ Chimere and its dependencies installed in the docker image are:
 
 
 1) Get the docker image:
-   1) Option 1: Get the *chimere_conae* image from docker hub
+   1) Option 1: Get the *chimere_conae* image from docker hub (prod mode)
       1) `docker pull lvc0107/chimere_conae:latest` 
-   2) Option 2: Build the image from the source code
+   2) Option 2: Build the image from the source code(Only needed in dev mode)
       1) `git clone git@github.com:lvc0107/CONAE_WRF_CHIMERE.git` (SSH)
          or `git clone https://github.com/lvc0107/CONAE_WRF_CHIMERE.git` (HTTPS)
       2) Set environment variables for Chimere credentials in order to download the Chimere source code
@@ -34,15 +34,16 @@ Chimere and its dependencies installed in the docker image are:
       3) `cd CONAE_WRF_CHIMERE`
       4) `docker build --build-arg CHIMERE_USER=$CHIMERE_USER --build-arg CHIMERE_PASS=$CHIMERE_PASS -t chimere_conae .`
 2) Create container:
-   1) `docker run -it --name chimere_container chimere_conae /bin/tcsh`
+   1) `docker run -it --name chimere_container lvc0107/chimere_conae /bin/tcsh`
    2) Run tests
       1) `./chimere_v2020r3/chimere.sh` TODO complete
    3) Check result in TODO complete
    
 3) Run the model: TODO Complete
-   1) `docker start -it --name chimere_container chimere_conae /bin/tcsh`
-   2) `./chimere_v2020r3/chimere.sh`
-   3) Get the results from the output_chimere folder
+   1) `docker start chimere_container`
+   2) `docker exec -it chimere_container /bin/tcsh`
+   3) `./chimere_v2020r3/chimere.sh` TODO COMPLETE
+   4) Get the results from the output_chimere folder
 
 # TODO 
 1) output volumes
