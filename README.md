@@ -28,14 +28,13 @@ Chimere and its dependencies installed in the docker image are:
    2) Option 2: Build the image from the source code
       1) `git clone git@github.com:lvc0107/CONAE_WRF_CHIMERE.git` (SSH)
          or `git clone https://github.com/lvc0107/CONAE_WRF_CHIMERE.git` (HTTPS)
-      2) `cd CONAE_WRF_CHIMERE`
-      3) `docker build -t chimere_conae`
+      2) Set environment variables for Chimere credentials in order to download the Chimere source code
+         1) `export CHIMERE_USER=****`
+         2) `export CHIMERE_PASS=****`
+      3) `cd CONAE_WRF_CHIMERE`
+      4) `docker build --build-arg CHIMERE_USER=$CHIMERE_USER --build-arg CHIMERE_PASS=$CHIMERE_PASS -t chimere_conae`
 2) Create container:
    1) `docker run -it --name chimere_container chimere_conae /bin/tcsh`
-      1) Inside the docker container, build Chimere # TODO probably not needed
-      2) `cd chimere` # TODO probably not needed
-      3) `./build-chimere.sh --arch gfortran`# TODO probably not needed
-      4) `./build-wrf.sh` # TODO probably not needed
    2) Run tests
    3) Get the results from the output_chimere folder
 

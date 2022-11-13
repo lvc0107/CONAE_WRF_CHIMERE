@@ -28,7 +28,10 @@ RUN mkdir /wrf \
 # Build the libraries with a parallel Make
 ENV J 4
 
-
+ARG CHIMERE_USER
+ENV CHIMERE_USER=$CHIMERE_USER
+ARG CHIMERE_PASS
+ENV CHIMERE_PASS=$CHIMERE_PASS
 
 # TODO install in BUILD_DIR
 # Build OpenMPI
@@ -134,10 +137,9 @@ RUN mkdir -p /wrf/libs/eccodes/BUILD_DIR  \
   && cd
 
 #CHIMERE
-COPY --chown=wrfuser chimere_v2020r3.tar.gz  .
 COPY --chown=wrfuser mychimere-gfortran .
-RUN cp chimere_v2020r3.tar.gz /wrf/ \
-  && cd /wrf \
+RUN cd /wrf \
+  && wget --no-check-certificate --user $CHIMERE_USER --password $CHIMERE_PASS https://www.lmd.polytechnique.fr/chimdata/chimere_v2020r3.tar.gz \
   && tar -xvzf chimere_v2020r3.tar.gz  \
   && cp ../mychimere-gfortran chimere_v2020r3/mychimere \
   && cd chimere_v2020r3 \
