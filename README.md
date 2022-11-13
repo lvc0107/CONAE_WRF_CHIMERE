@@ -32,12 +32,17 @@ Chimere and its dependencies installed in the docker image are:
          1) `export CHIMERE_USER=****`
          2) `export CHIMERE_PASS=****`
       3) `cd CONAE_WRF_CHIMERE`
-      4) `docker build --build-arg CHIMERE_USER=$CHIMERE_USER --build-arg CHIMERE_PASS=$CHIMERE_PASS -t chimere_conae`
+      4) `docker build --build-arg CHIMERE_USER=$CHIMERE_USER --build-arg CHIMERE_PASS=$CHIMERE_PASS -t chimere_conae .`
 2) Create container:
    1) `docker run -it --name chimere_container chimere_conae /bin/tcsh`
    2) Run tests
+      1) `./chimere_v2020r3/chimere.sh` TODO complete
+   3) Check result in TODO complete
+   
+3) Run the model: TODO Complete
+   1) `docker start -it --name chimere_container chimere_conae /bin/tcsh`
+   2) `./chimere_v2020r3/chimere.sh`
    3) Get the results from the output_chimere folder
-
 
 # TODO 
 1) output volumes

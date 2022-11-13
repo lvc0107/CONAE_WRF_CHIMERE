@@ -161,12 +161,6 @@ RUN mkdir -p  /wrf/WPS_GEOG /wrf/wrfinput /wrf/wrfoutput \
  &&  chown -R wrfuser:wrf /wrf /wrf/WPS_GEOG /wrf/wrfinput /wrf/wrfoutput /usr/local \
  &&  chmod 6755 /wrf /wrf/WPS_GEOG /wrf/wrfinput /wrf/wrfoutput /usr/local
 
-# TODO REVIEW this commands
-# Download NCL
-#RUN curl -SL https://ral.ucar.edu/sites/default/files/public/projects/ncar-docker-wrf/nclncarg-6.3.0.linuxcentos7.0x8664nodapgcc482.tar.gz | tar zxC /usr/local
-# from here: https://www.earthsystemgrid.org/dataset/ncl.630.2/file.html
-RUN curl -SL  https://www.earthsystemgrid.org/api/v1/dataset/ncl.630.2/file/ncl_ncarg-6.3.0.tar.gz | tar zxC /usr/local
-ENV NCARG_ROOT /usr/local
 
 # TODO REVIEW this commands
 # Set environment for interactive container shells
