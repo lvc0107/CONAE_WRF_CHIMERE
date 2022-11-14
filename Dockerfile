@@ -29,9 +29,7 @@ RUN mkdir /wrf \
 ENV J 4
 
 ARG CHIMERE_USER
-ENV CHIMERE_USER=$CHIMERE_USER
 ARG CHIMERE_PASS
-ENV CHIMERE_PASS=$CHIMERE_PASS
 
 # TODO install in BUILD_DIR
 # Build OpenMPI
@@ -162,7 +160,7 @@ RUN mkdir -p  /wrf/WPS_GEOG /wrf/wrfinput /wrf/wrfoutput \
  &&  chmod 6755 /wrf /wrf/WPS_GEOG /wrf/wrfinput /wrf/wrfoutput /usr/local
 
 
-# TODO REVIEW this commands
+# TODO REVIEW these commands
 # Set environment for interactive container shells
 RUN echo export LDFLAGS="-lm" >> /etc/bashrc \
  && echo export NETCDF=${NETCDF} >> /etc/bashrc \
@@ -171,7 +169,7 @@ RUN echo export LDFLAGS="-lm" >> /etc/bashrc \
  && echo export LD_LIBRARY_PATH="/opt/rh/devtoolset-8/root/usr/lib/gcc/x86_64-redhat-linux/8:/usr/lib64/openmpi/lib:${NETCDF}/lib:${LD_LIBRARY_PATH}" >> /etc/bashrc  \
  && echo export PATH=".:/opt/rh/devtoolset-8/root/usr/bin:/usr/lib64/openmpi/bin:${NETCDF}/bin:$PATH" >> /etc/bashrc
 
-# TODO REVIEW this commands
+# TODO REVIEW these commands
 RUN echo setenv LDFLAGS "-lm" >> /etc/csh.cshrc \
  && echo setenv NETCDF "${NETCDF}" >> /etc/csh.cshrc \
  && echo setenv JASPERINC "/wrf/libs/jasper/BUILD_DIR/include/" >> /etc/csh.cshrc \
@@ -181,7 +179,6 @@ RUN echo setenv LDFLAGS "-lm" >> /etc/csh.cshrc \
 
 # TODO REVIEW these commands
 RUN mkdir /wrf/.ssh ; echo "StrictHostKeyChecking no" > /wrf/.ssh/config
-COPY default-mca-params.conf /wrf/.openmpi/mca-params.conf
 RUN mkdir -p /wrf/.openmpi
 RUN chown -R wrfuser:wrf /wrf/
 

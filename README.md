@@ -19,7 +19,7 @@ Chimere and its dependencies installed in the docker image are:
 * Jasper https://www.ece.uvic.ca/~frodo/jasper/#download JasPer 1.900.1
 * Cmake https://github.com/Kitware/CMake/releases/download/v3.13.4/cmake-3.13.4.tar.gz cmake-3.13.4
 
-### Requirements in the host: Docker.20.10.13
+###Requirements in the host: Docker.20.10.13
 
 
 1) Get the docker image:
