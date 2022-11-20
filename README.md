@@ -19,21 +19,27 @@ Chimere and its dependencies installed in the docker image are:
 * Jasper https://www.ece.uvic.ca/~frodo/jasper/#download JasPer 1.900.1
 * Cmake https://github.com/Kitware/CMake/releases/download/v3.13.4/cmake-3.13.4.tar.gz cmake-3.13.4
 
-###Requirements in the host: Docker.20.10.13
+### Requirements in the host: Docker.20.10.13 or greater
 
 
 1) Get the docker image:
-   1) Option 1: Get the *chimere_conae* image from docker hub (prod mode)
+   1) Option 1: Get the *chimere_conae* image from docker hub (prod mode) (This is a public repository,
+   but it's convenient for security reasons to store it in a private one, and change lvc0107 by conae_user)
       1) `docker pull lvc0107/chimere_conae:latest` 
-   2) Option 2: Build the image from the source code(Only needed in dev mode)
+   3) Option 2: Build the image from the source code(Only needed in dev mode)
       1) `git clone git@github.com:lvc0107/CONAE_WRF_CHIMERE.git` (SSH)
          or `git clone https://github.com/lvc0107/CONAE_WRF_CHIMERE.git` (HTTPS)
       2) Set environment variables for Chimere credentials in order to download the Chimere source code
          1) `export CHIMERE_USER=****`
          2) `export CHIMERE_PASS=****`
       3) `cd CONAE_WRF_CHIMERE`
-      4) `docker build --build-arg CHIMERE_USER=$CHIMERE_USER --build-arg CHIMERE_PASS=$CHIMERE_PASS -t chimere_conae .`
-2) Create container:
+      4) `echo $CHIMERE_USER > secret_user.txt`
+      5) `echo $CHIMERE_PASS > secret_pass.txt`
+      6) `DOCKER_BUILDKIT=1 docker build -t chimere_conae --secret id=secret_user,src=secret_user.txt --secret id=secret_pass,src=secret_pass.txt .`
+      7) Push the new image to docker hub
+         1) `docker tag chimere_conae lvc0107/chimere_conae`
+         2) `docker push lvc0107/chimere_conae`
+2) Create and enter in container:
    1) `docker run -it --name chimere_container lvc0107/chimere_conae /bin/tcsh`
    2) You can verify Chimere, WRF and WPS are successfully compiled by doing:
       1) `cat ./chimere_v2020r3/build_log*`

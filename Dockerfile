@@ -1,3 +1,4 @@
+# syntax = docker/dockerfile:1.3
 #
 #FROM centos:latest - some users reported problems with yum
 FROM centos:7
@@ -27,9 +28,6 @@ RUN mkdir /wrf \
 
 # Build the libraries with a parallel Make
 ENV J 4
-
-ARG CHIMERE_USER
-ARG CHIMERE_PASS
 
 # TODO install in BUILD_DIR
 # Build OpenMPI
@@ -136,7 +134,9 @@ RUN mkdir -p /wrf/libs/eccodes/BUILD_DIR  \
 
 #CHIMERE
 COPY --chown=wrfuser mychimere-gfortran .
-RUN cd /wrf \
+RUN --mount=type=secret,id=secret_user --mount=type=secret,id=secret_pass cd /wrf \
+  && export CHIMERE_USER=$(cat /run/secrets/secret_user) \
+  && export CHIMERE_PASS=$(cat /run/secrets/secret_pass) \
   && wget --no-check-certificate --user $CHIMERE_USER --password $CHIMERE_PASS https://www.lmd.polytechnique.fr/chimdata/chimere_v2020r3.tar.gz \
   && tar -xvzf chimere_v2020r3.tar.gz  \
   && cp ../mychimere-gfortran chimere_v2020r3/mychimere \
