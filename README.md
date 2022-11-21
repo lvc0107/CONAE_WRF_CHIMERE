@@ -39,10 +39,8 @@ Chimere and its dependencies installed in the docker image are:
          2) `docker login --username <conae_user>`
          3) `docker push <conae_user>/chimere_conae`
 2) Create and enter the container:
-   1) We need to define folders in the Host in order to READ and WRITE data 
-   between the host and the container. 
-   2) `cd CONAE_WRF_CHIMERE; mkdir INPUT; mkdir OUTPUT;`
-   3) `docker run -v `pwd`/OUTPUT:/wrf/wrfoutput -v `pwd`/INPUT:/wrf/wrfinput -it --name chimere_container lvc0107/chimere_conae /bin/tcsh`
+   1) `cd CONAE_WRF_CHIMERE`
+   2) `docker run -v $(pwd)/OUTPUT:/wrf/wrfoutput -v ($pwd)/INPUT:/wrf/wrfinput -it --name chimere_container lvc0107/chimere_conae /bin/tcsh`
    You can verify that Chimere, WRF and WPS have been successfully compiled by doing the following:
       1) `cat ./chimere_v2020r3/build_log*`
       2) `exit`
