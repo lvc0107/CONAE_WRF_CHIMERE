@@ -39,22 +39,28 @@ Chimere and its dependencies installed in the docker image are:
          2) `docker login --username <conae_user>`
          3) `docker push <conae_user>/chimere_conae`
 2) Create and enter the container:
-   1) `docker run -it --name chimere_container lvc0107/chimere_conae /bin/tcsh`
-   2) You can verify that Chimere, WRF and WPS have been successfully compiled by doing the following:
+   1) We need to define folders in the Host in order to READ and WRITE data 
+   between the host and the container. 
+   2) `cd CONAE_WRF_CHIMERE; mkdir INPUT; mkdir OUTPUT;`
+   3) `docker run -v `pwd`/OUTPUT:/wrf/wrfoutput -v `pwd`/INPUT:/wrf/wrfinput -it --name chimere_container lvc0107/chimere_conae /bin/tcsh`
+   You can verify that Chimere, WRF and WPS have been successfully compiled by doing the following:
       1) `cat ./chimere_v2020r3/build_log*`
-   3) Run tests: TODO COMPLETE
-      1) `./chimere_v2020r3/chimere.sh` TODO COMPLETE
-   4) Check result in TODO COMPLETE
+      2) `exit`
+3) Download from Chimere page all the required DB.
+   1) `cd CONAE_WRF_CHIMERE` 
+      1) get TestCase2020r3.tar.gz, `tar -xvzf TestCase2020r3.tar.gz`
+      2) get BIGFILES2020.tar.gz, `tar -xvzf BIGFILES2020.tar.gz`
+      3) get MEGAN_30s.tar.gz, `tar -xvzf MEGAN_30s.tar.gz`
+   2) Copy DB into INPUT folder. TODO COMPLETE
    
-3) Run the model: TODO COMPLETE
+4) Run the model: TODO COMPLETE
    1) `docker start chimere_container`
    2) `docker exec -it chimere_container /bin/tcsh`
    3) `./chimere_v2020r3/chimere.sh` TODO COMPLETE
    4) Get the results from the output_chimere folder.
 
 # TODO 
-1) output volumes.
-2) check Chimere in online mode.
-3) Check multiples instances of the container in the host.
+1) check Chimere in online mode.
+2) Check multiples instances of the container in the host.
    1) Docker compose or K8
-4) openmpi in the host in order to link multiples containers.
+3) openmpi in the host in order to link multiples containers.
