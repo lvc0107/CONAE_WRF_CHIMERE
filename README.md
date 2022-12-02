@@ -1,10 +1,10 @@
-# Docker container for CHIMERE.
+# Docker container for CHIMERE
 
 ### This docker image is based on
-https://www.lmd.polytechnique.fr/chimere/docs/CHIMEREdoc_v2020r3.pdf.
+https://www.lmd.polytechnique.fr/chimere/docs/CHIMEREdoc_v2020r3.pdf
 
 The docker image is set in a Centos.7 OS.
-Chimere is ready to build using the gfortran compiler
+Chimere is ready to build using the gfortran compiler.
 
 Chimere and its dependencies installed in the docker image are:
 
@@ -21,29 +21,36 @@ Chimere and its dependencies installed in the docker image are:
 
 ### Requirements in the host: Docker.20.10.13 or greater
 
+`docker --version`
+
 
 1) Get the docker image:
-   1) Option 1: Get the *chimere_conae* image from docker hub (prod mode) (This is a public repository,
+   1) Option 1: Get the *chimere_conae* image from docker hub (This is a public repository,
    but it's convenient for security reasons to store it in a private one, and change lvc0107 to conae_user).
-      1) `docker pull lvc0107/chimere_conae:latest` 
-   3) Option 2: Build the image from the source code(Only needed in dev mode).
+      1) `docker pull lvc0107/chimere_conae:latest`
+      2) `mkdir CONAE_WRF_CHIMERE`
+   3) Option 2: Build the image from the source code.
       1) `git clone git@github.com:lvc0107/CONAE_WRF_CHIMERE.git` (SSH)
          or `git clone https://github.com/lvc0107/CONAE_WRF_CHIMERE.git` (HTTPS)
       2) `cd CONAE_WRF_CHIMERE`
       3) Set environment variables for Chimere credentials in order to download the Chimere source code.
          1) `export CHIMERE_USER=****`
          2) `export CHIMERE_PASS=****`
-      4) `DOCKER_BUILDKIT=1 docker build -t chimere_conae --secret id=secret_user,env=CHIMERE_USER --secret id=secret_pass,env=CHIMERE_PASS .`
+      4) `DOCKER_BUILDKIT=1 docker build -t chimere_conae:<new_tag> --secret id=secret_user,env=CHIMERE_USER --secret id=secret_pass,env=CHIMERE_PASS .` where <new_tag> identify the latest change
+         
       5) Push the new image to docker hub (assuming a private docker repository already exists with a <conae_user>).
          1) `docker tag chimere_conae <conae_user>/chimere_conae`
          2) `docker login --username <conae_user>`
          3) `docker push <conae_user>/chimere_conae`
 2) Create and enter the container:
    1) `cd CONAE_WRF_CHIMERE`
-   2) `docker run -v $(pwd)/OUTPUT:/wrf/wrfoutput -v ($pwd)/INPUT:/wrf/wrfinput -it --name chimere_container lvc0107/chimere_conae /bin/tcsh`
+   2) `docker run -v $(pwd)/OUTPUT:/wrf/wrfoutput -v $(pwd)/INPUT:/wrf/wrfinput -it --name chimere_container lvc0107/chimere_conae /bin/tcsh`
    You can verify that Chimere, WRF and WPS have been successfully compiled by doing the following:
-      1) `cat ./chimere_v2020r3/build_log*`
-      2) `exit`
+   3) `cat ./chimere_v2020r3/build_log*`
+   4) If there are changes on the docker container we can create a new docker image from the updated container
+   5) `COMPLETE HERE`
+   6) `exit`
+
 3) Download from Chimere page all the required DB.
    1) `cd CONAE_WRF_CHIMERE` 
       1) get TestCase2020r3.tar.gz, `tar -xvzf TestCase2020r3.tar.gz`

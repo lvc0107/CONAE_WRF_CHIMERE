@@ -1,4 +1,4 @@
-#!/bin/bashñ
+#!/bin/bash
 
 #---------------------------------------------------------------------------------
 #	Architecture file for compiling and running CHIMERE	
@@ -66,8 +66,8 @@ export my_blitzinc=/wrf/libs/blitz/BUILD_DIR/include		 # Path to BLITZ include f
 #---------------------------------------------------------------------------------
 # 	Utilities	
 #---------------------------------------------------------------------------------
-export my_make=make 		# Path to make
-export my_awk=awk			# Path to awk
+export my_make=make 		                # Path to make
+export my_awk=awk			                  # Path to awk
 export my_ncdump=/wrf/libs/netcdf/bin		# Path to ncdump
 
 
