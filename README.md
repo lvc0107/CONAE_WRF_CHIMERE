@@ -28,7 +28,8 @@ Chimere and its dependencies installed in the docker image are:
    1) Option 1: Get the *chimere_conae* image from docker hub (This is a public repository,
    but it's convenient for security reasons to store it in a private one, and change lvc0107 to conae_user).
       1) `docker pull lvc0107/chimere_conae:latest`
-      2) `mkdir CONAE_WRF_CHIMERE`
+      2) `mkdir -p CONAE_WRF_CHIMERE/INPUT`
+      3) `mkdir -p CONAE_WRF_CHIMERE/OUTPUT`
    3) Option 2: Build the image from the source code.
       1) `git clone git@github.com:lvc0107/CONAE_WRF_CHIMERE.git` (SSH)
          or `git clone https://github.com/lvc0107/CONAE_WRF_CHIMERE.git` (HTTPS)
