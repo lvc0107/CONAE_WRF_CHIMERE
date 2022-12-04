@@ -10,9 +10,9 @@ jobs:
 
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: centos:7
 
     steps:
     - uses: actions/checkout@v3
     - name: Build the Docker image
-      run: DOCKER_BUILDKIT=1 docker build -t chimere_conae:$(date +%FT%H:%M:%S)  --secret id=secret_user,env=CHIMERE_USER --secret id=secret_pass,env=CHIMERE_PASS .
+      run: docker build -t chimere_conae:$(date +%FT%H:%M:%S)  --secret id=secret_user,env=CHIMERE_USER --secret id=secret_pass,env=CHIMERE_PASS .
