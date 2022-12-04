@@ -78,7 +78,7 @@ RUN source /opt/rh/devtoolset-8/enable \
  && ./configure CC=/usr/local/bin/mpicc FC=/usr/local/bin/mpif90 CPPFLAGS="-I/usr/local/include/openmpi -I/usr/local/include -I/chim/libs/netcdf/include" LDFLAGS="-L/usr/local/lib/openmpi/ -L/usr/local/lib -L/chim/libs/netcdf/lib" --prefix=${NETCDF} &> /chim/libs/build_log_ncf_config \
  && make install &> /chim/libs/build_log_ncf_make
 
-
+# Build BLITZ
 COPY --chown=chimuser blitz-0.10.tar.gz  .
 RUN mkdir -p /chim/libs/blitz/BUILD_DIR  \
   && cp blitz-0.10.tar.gz /chim/libs/blitz \
@@ -92,6 +92,7 @@ RUN mkdir -p /chim/libs/blitz/BUILD_DIR  \
   && cd ..; rm blitz-0.10.tar.gz \
   && cd
 
+# Build JASPER
 COPY --chown=chimuser jasper-1.900.1.zip  .
 RUN mkdir -p /chim/libs/jasper/BUILD_DIR  \
   && cp jasper-1.900.1.zip /chim/libs/jasper \
@@ -105,6 +106,7 @@ RUN mkdir -p /chim/libs/jasper/BUILD_DIR  \
   && cd ..; rm jasper-1.900.1.zip \
   && cd
 
+# Build CMAKE
 COPY --chown=chimuser cmake-3.13.4.tar.gz .
 RUN mkdir -p /chim/libs/cmake/BUILD_DIR  \
   && cp cmake-3.13.4.tar.gz /chim/libs/cmake \
@@ -117,7 +119,7 @@ RUN mkdir -p /chim/libs/cmake/BUILD_DIR  \
   && cd ..; rm cmake-3.13.4.tar.gz \
   && cd
 
-
+# Build ECCODES
 COPY --chown=chimuser eccodes-2.19.1-Source.tar.gz .
 RUN mkdir -p /chim/libs/eccodes/BUILD_DIR  \
   && cp eccodes-2.19.1-Source.tar.gz /chim/libs/eccodes \
@@ -132,7 +134,7 @@ RUN mkdir -p /chim/libs/eccodes/BUILD_DIR  \
   && cd ..; rm eccodes-2.19.1-Source.tar.gz \
   && cd
 
-#CHIMERE
+# Build CHIMERE
 COPY --chown=chimuser mychimere-gfortran .
 RUN --mount=type=secret,id=secret_user --mount=type=secret,id=secret_pass cd /chim \
   && export CHIMERE_USER=$(cat /run/secrets/secret_user) \
@@ -154,7 +156,7 @@ RUN mkdir -p /var/run/sshd \
     && sed -i 's/#RSAAuthentication yes/RSAAuthentication yes/g' /etc/ssh/sshd_config \
     && sed -i 's/#PubkeyAuthentication yes/PubkeyAuthentication yes/g' /etc/ssh/sshd_config
 
-# TODO REVIEW these commands
+
 RUN mkdir -p  /chim/chim_input /chim/chim_output \
  &&  chown -R chimuser:chim /chim/chim_input /chim/chim_output /usr/local \
  &&  chmod 6755 /chim /chim/chim_input /chim/chim_output /usr/local
@@ -200,4 +202,4 @@ RUN ssh-keygen -f /chim/.ssh/id_rsa -t rsa -N '' \
 
 VOLUME /chim
 CMD ["/bin/tcsh"]
-#
+

@@ -36,31 +36,31 @@ export my_hdfinc=/usr/local/include		# Path to HDF5 parallel include files direc
 #---------------------------------------------------------------------------------
 # 	NETCDF-C  - link with HDF5 parallel 
 #---------------------------------------------------------------------------------
-export my_netcdfCbin=/wrf/libs/netcdf/bin/ 		# Path to NETCDF-C (linked with HDF5 parallel) binaries directory
-export my_netcdfClib=/wrf/libs/netcdf/lib/		# Path to NETCDF-C (linked with HDF5 parallel) library directory
+export my_netcdfCbin=/chim/libs/netcdf/bin/ 		# Path to NETCDF-C (linked with HDF5 parallel) binaries directory
+export my_netcdfClib=/chim/libs/netcdf/lib/		# Path to NETCDF-C (linked with HDF5 parallel) library directory
 
 
 #---------------------------------------------------------------------------------
 # 	NETCDF-Fortran  - link with HDF5 parallel and NETCDF-C
 #---------------------------------------------------------------------------------
-export my_netcdfF90bin=/wrf/libs/netcdf/bin/        # PATH to NETCDF-Fortran (linked with HDF5 parallel and NETCDF-C) binaries  directory
-export my_netcdfF90lib=/wrf/libs/netcdf/lib/ 		    # Path to NETCDF-Fortran (linked with HDF5 parallel and NETCDF-C) library  directory
-export my_netcdfF90inc=/wrf/libs/netcdf/include/ 		# Path to NETCDF-Fortran (linked with HDF5 parallel and NETCDF-C) include files  directory
+export my_netcdfF90bin=/chim/libs/netcdf/bin/        # PATH to NETCDF-Fortran (linked with HDF5 parallel and NETCDF-C) binaries  directory
+export my_netcdfF90lib=/chim/libs/netcdf/lib/ 		    # Path to NETCDF-Fortran (linked with HDF5 parallel and NETCDF-C) library  directory
+export my_netcdfF90inc=/chim/libs/netcdf/include/ 		# Path to NETCDF-Fortran (linked with HDF5 parallel and NETCDF-C) include files  directory
 
 
 #---------------------------------------------------------------------------------
 # 	GRIB  - link with jasper 
 #---------------------------------------------------------------------------------
-export my_griblib=/wrf/libs/eccodes/BUILD_DIR/lib64     	# Path to GRIB library directory
-export my_gribinc=/wrf/libs/eccodes/BUILD_DIR/include 		# Path to GRIB include files directory
-export my_jasperlib=/wrf/libs/jasper/BUILD_DIR/lib  			# Path to JASPER library directory
-export my_jasperinc=/wrf/libs/jasper/BUILD_DIR/include		# Path to JASPER include files directory
+export my_griblib=/chim/libs/eccodes/BUILD_DIR/lib64     	# Path to GRIB library directory
+export my_gribinc=/chim/libs/eccodes/BUILD_DIR/include 		# Path to GRIB include files directory
+export my_jasperlib=/chim/libs/jasper/BUILD_DIR/lib  			# Path to JASPER library directory
+export my_jasperinc=/chim/libs/jasper/BUILD_DIR/include		# Path to JASPER include files directory
 
 
 #---------------------------------------------------------------------------------
 # 	BLITZ
 #---------------------------------------------------------------------------------
-export my_blitzinc=/wrf/libs/blitz/BUILD_DIR/include		 # Path to BLITZ include files
+export my_blitzinc=/chim/libs/blitz/BUILD_DIR/include		 # Path to BLITZ include files
 
 
 #---------------------------------------------------------------------------------
@@ -68,7 +68,7 @@ export my_blitzinc=/wrf/libs/blitz/BUILD_DIR/include		 # Path to BLITZ include f
 #---------------------------------------------------------------------------------
 export my_make=make 		                # Path to make
 export my_awk=awk			                  # Path to awk
-export my_ncdump=/wrf/libs/netcdf/bin		# Path to ncdump
+export my_ncdump=/chim/libs/netcdf/bin		# Path to ncdump
 
 
 #---------------------------------------------------------------------------------

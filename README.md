@@ -3,6 +3,10 @@
 ### This docker image is based on
 https://www.lmd.polytechnique.fr/chimere/docs/CHIMEREdoc_v2020r3.pdf
 
+TODO: UNFORK this repository by doing
+https://stackoverflow.com/questions/29326767/unfork-a-github-fork-without-deleting/41486339#41486339
+
+
 The docker image is set in a Centos.7 OS.
 Chimere is ready to build using the gfortran compiler.
 
@@ -37,7 +41,8 @@ Chimere and its dependencies installed in the docker image are:
       3) Set environment variables for Chimere credentials in order to download the Chimere source code.
          1) `export CHIMERE_USER=****`
          2) `export CHIMERE_PASS=****`
-      4) `DOCKER_BUILDKIT=1 docker build -t chimere_conae:<new_tag> --secret id=secret_user,env=CHIMERE_USER --secret id=secret_pass,env=CHIMERE_PASS .` where <new_tag> identify the latest change
+      4) `DOCKER_BUILDKIT=1 docker build -t chimere_conae:<new_tag> --secret id=secret_user,env=CHIMERE_USER --secret id=secret_pass,env=CHIMERE_PASS .` 
+      where <new_tag> identify the latest change. We can add the date with the following format chimere_conae:<new_tag>$(date +%FT%H:%M:%S)
          
       5) Push the new image to docker hub (assuming a private docker repository already exists with a <conae_user>).
          1) `docker tag chimere_conae <conae_user>/chimere_conae`
