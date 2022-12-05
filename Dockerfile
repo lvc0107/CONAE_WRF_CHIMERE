@@ -157,8 +157,7 @@ RUN mkdir -p /var/run/sshd \
     && sed -i 's/#PubkeyAuthentication yes/PubkeyAuthentication yes/g' /etc/ssh/sshd_config
 
 
-RUN mkdir -p  /chim/chim_input /chim/chim_output \
- &&  chown -R chimuser:chim /chim/chim_input /chim/chim_output /usr/local \
+RUN mkdir -p /chim/chim_input /chim/chim_output \
  &&  chmod 6755 /chim /chim/chim_input /chim/chim_output /usr/local
 
 

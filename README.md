@@ -50,7 +50,7 @@ Chimere and its dependencies installed in the docker image are:
          3) `docker push <conae_user>/chimere_conae`
 2) Create and enter the container:
    1) `cd CONAE_WRF_CHIMERE`
-   2) `docker run -v $(pwd)/INPUT:/wrf/wrfinput -v $(pwd)/OUTPUT:/wrf/wrfoutput -it --name chimere_container lvc0107/chimere_conae /bin/tcsh`
+   2) `docker run -v $(pwd)/INPUT:/chim/chim_input -v $(pwd)/OUTPUT:/chim/chim_output -it --name chimere_container lvc0107/chimere_conae /bin/tcsh`
    You can verify that Chimere, WRF and WPS have been successfully compiled by doing the following:
    3) `cat ./chimere_v2020r3/build_log*`
    4) If there are changes on the docker container we can create a new docker image from the updated container
