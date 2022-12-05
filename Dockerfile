@@ -79,7 +79,7 @@ RUN source /opt/rh/devtoolset-8/enable \
  && make install &> /chim/libs/build_log_ncf_make
 
 # Build BLITZ
-COPY --chown=chimuser blitz-0.10.tar.gz  .
+COPY blitz-0.10.tar.gz  .
 RUN mkdir -p /chim/libs/blitz/BUILD_DIR  \
   && cp blitz-0.10.tar.gz /chim/libs/blitz \
   && cd /chim/libs/blitz \
