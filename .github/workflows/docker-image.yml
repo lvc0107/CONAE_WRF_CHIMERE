@@ -22,4 +22,4 @@ jobs:
         password: ${{ secrets.DOCKERHUB_PASS }}
     - uses: actions/checkout@v3
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag chimere_conae:$(date +%FT%H:%M:%S)
+      run: docker build . --file Dockerfile --tag chimere_conae:$(date +%FT%H_%M_%S)
