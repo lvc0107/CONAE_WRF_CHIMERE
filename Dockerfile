@@ -93,7 +93,7 @@ RUN mkdir -p /chim/libs/blitz/BUILD_DIR  \
   && cd
 
 # Build JASPER
-COPY --chown=chimuser jasper-1.900.1.zip  .
+COPY jasper-1.900.1.zip  .
 RUN mkdir -p /chim/libs/jasper/BUILD_DIR  \
   && cp jasper-1.900.1.zip /chim/libs/jasper \
   && cd /chim/libs/jasper \
@@ -107,7 +107,7 @@ RUN mkdir -p /chim/libs/jasper/BUILD_DIR  \
   && cd
 
 # Build CMAKE
-COPY --chown=chimuser cmake-3.13.4.tar.gz .
+COPY cmake-3.13.4.tar.gz .
 RUN mkdir -p /chim/libs/cmake/BUILD_DIR  \
   && cp cmake-3.13.4.tar.gz /chim/libs/cmake \
   && cd /chim/libs/cmake \
@@ -120,7 +120,7 @@ RUN mkdir -p /chim/libs/cmake/BUILD_DIR  \
   && cd
 
 # Build ECCODES
-COPY --chown=chimuser eccodes-2.19.1-Source.tar.gz .
+COPY eccodes-2.19.1-Source.tar.gz .
 RUN mkdir -p /chim/libs/eccodes/BUILD_DIR  \
   && cp eccodes-2.19.1-Source.tar.gz /chim/libs/eccodes \
   && cd /chim/libs/eccodes \
@@ -135,7 +135,7 @@ RUN mkdir -p /chim/libs/eccodes/BUILD_DIR  \
   && cd
 
 # Build CHIMERE
-COPY --chown=chimuser mychimere-gfortran .
+COPY mychimere-gfortran .
 RUN --mount=type=secret,id=secret_user --mount=type=secret,id=secret_pass cd /chim \
   && export CHIMERE_USER=$(cat /run/secrets/secret_user) \
   && export CHIMERE_PASS=$(cat /run/secrets/secret_pass) \
