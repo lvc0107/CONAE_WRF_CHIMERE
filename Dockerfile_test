@@ -29,32 +29,17 @@ RUN mkdir /chim \
 # Build the libraries with a parallel Make
 ENV J 4
 
-# Build CHIMERE
-COPY mychimere-gfortran .
-RUN --mount=type=secret,id=secret_user --mount=type=secret,id=secret_pass cd /chim \
-  && export CHIMERE_USER=$(cat /run/secrets/secret_user) \
-  && export CHIMERE_PASS=$(cat /run/secrets/secret_pass) \
-  && wget --no-check-certificate --user $CHIMERE_USER --password $CHIMERE_PASS https://www.lmd.polytechnique.fr/chimdata/chimere_v2020r3.tar.gz \
-  && tar -xvzf chimere_v2020r3.tar.gz  \
-  && cp ../mychimere-gfortran chimere_v2020r3/mychimere \
-  && cd chimere_v2020r3 \
-  && ./build-chimere.sh --arch gfortran &> /chim/chimere_v2020r3/build_log_chimere \
-  && ./build-wrf.sh &> /chim/chimere_v2020r3/build_log_wrf \
-  && cd /chim ; rm chimere_v2020r3.tar.gz \
-  && cd
-
-
 # TODO install in BUILD_DIR
 # Build OpenMPI
 RUN mkdir -p /chim/libs/openmpi/BUILD_DIR
-RUN source /opt/rh/devtoolset-8/enable \
- && cd /chim/libs/openmpi/BUILD_DIR \
- && curl -L -O https://download.open-mpi.org/release/open-mpi/v2.0/openmpi-2.0.4.tar.gz \
- && tar -xf openmpi-2.0.4.tar.gz \
- && cd openmpi-2.0.4 \
- && ./configure CC=/usr/bin/gcc CXX=/usr/bin/g++ FC=/usr/bin/gfortran CFLAGS=-m64 CXXFLAGS=-m64 FCFLAGS=-m64 --prefix=/usr/local &> /chim/libs/build_log_openmpi_config \
- && make all install &> /chim/libs/build_log_openmpi_make \
- && cd / \
+RUN source /opt/rh/devtoolset-8/enable
+RUN cd /chim/libs/openmpi/BUILD_DIR
+RUN curl -L -O https://download.open-mpi.org/release/open-mpi/v2.0/openmpi-2.0.4.tar.gz
+RUN tar -xf openmpi-2.0.4.tar.gz
+RUN cd openmpi-2.0.4
+RUN ./configure CC=/usr/bin/gcc CXX=/usr/bin/g++ FC=/usr/bin/gfortran CFLAGS=-m64 CXXFLAGS=-m64 FCFLAGS=-m64 --prefix=/usr/local &> /chim/libs/build_log_openmpi_config
+RUN make all install &> /chim/libs/build_log_openmpi_make
+RUN cd / \
  && rm -rf /chim/libs/openmpi/BUILD_DIR
 
 # TODO install in BUILD_DIR
@@ -152,8 +137,8 @@ RUN mkdir -p /chim/libs/eccodes/BUILD_DIR  \
 # Build CHIMERE
 COPY mychimere-gfortran .
 RUN --mount=type=secret,id=secret_user --mount=type=secret,id=secret_pass cd /chim \
-  && if [[ -f "/run/secrets/secret_user" ]] ; then export CHIMERE_USER=$(cat /run/secrets/secret_user) ; else export CHIMERE_USER=$CHIMERE_USER ; fi  \
-  && if [[ -f "/run/secrets/secret_pass" ]] ; then export CHIMERE_PASS=$(cat /run/secrets/secret_pass) ; else export CHIMERE_USER=$CHIMERE_PASS ; fi  \
+  && export CHIMERE_USER=$(cat /run/secrets/secret_user) \
+  && export CHIMERE_PASS=$(cat /run/secrets/secret_pass) \
   && wget --no-check-certificate --user $CHIMERE_USER --password $CHIMERE_PASS https://www.lmd.polytechnique.fr/chimdata/chimere_v2020r3.tar.gz \
   && tar -xvzf chimere_v2020r3.tar.gz  \
   && cp ../mychimere-gfortran chimere_v2020r3/mychimere \
