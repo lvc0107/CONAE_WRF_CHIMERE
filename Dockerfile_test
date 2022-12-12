@@ -32,14 +32,14 @@ ENV J 4
 # TODO install in BUILD_DIR
 # Build OpenMPI
 RUN mkdir -p /chim/libs/openmpi/BUILD_DIR
-RUN source /opt/rh/devtoolset-8/enable
-RUN cd /chim/libs/openmpi/BUILD_DIR
-RUN curl -L -O https://download.open-mpi.org/release/open-mpi/v2.0/openmpi-2.0.4.tar.gz
-RUN tar -xf openmpi-2.0.4.tar.gz
-RUN cd /chim/libs/openmpi/BUILD_DIR/openmpi-2.0.4
-RUN ./configure CC=/usr/bin/gcc CXX=/usr/bin/g++ FC=/usr/bin/gfortran CFLAGS=-m64 CXXFLAGS=-m64 FCFLAGS=-m64 --prefix=/usr/local
-RUN make all install
-RUN cd / \
+RUN source /opt/rh/devtoolset-8/enable \
+ && cd /chim/libs/openmpi/BUILD_DIR \
+ && curl -L -O https://download.open-mpi.org/release/open-mpi/v2.0/openmpi-2.0.4.tar.gz \
+ && tar -xf openmpi-2.0.4.tar.gz \
+ && cd openmpi-2.0.4 \
+ && ./configure CC=/usr/bin/gcc CXX=/usr/bin/g++ FC=/usr/bin/gfortran CFLAGS=-m64 CXXFLAGS=-m64 FCFLAGS=-m64 --prefix=/usr/local \
+ && make all install  \
+ && cd / \
  && rm -rf /chim/libs/openmpi/BUILD_DIR
 
 # TODO install in BUILD_DIR
@@ -201,4 +201,3 @@ RUN ssh-keygen -f /chim/.ssh/id_rsa -t rsa -N '' \
 
 VOLUME /chim
 CMD ["/bin/tcsh"]
-
