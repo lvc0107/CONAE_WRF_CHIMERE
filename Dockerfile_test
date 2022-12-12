@@ -29,7 +29,6 @@ RUN mkdir /chim \
 # Build the libraries with a parallel Make
 ENV J 4
 
-# TODO install in BUILD_DIR
 # Build OpenMPI
 RUN mkdir -p /chim/libs/openmpi/BUILD_DIR
 RUN source /opt/rh/devtoolset-8/enable \
@@ -37,10 +36,10 @@ RUN source /opt/rh/devtoolset-8/enable \
  && curl -L -O https://download.open-mpi.org/release/open-mpi/v2.0/openmpi-2.0.4.tar.gz \
  && tar -xf openmpi-2.0.4.tar.gz \
  && cd openmpi-2.0.4 \
- && ./configure CC=/usr/bin/gcc CXX=/usr/bin/g++ FC=/usr/bin/gfortran CFLAGS=-m64 CXXFLAGS=-m64 FCFLAGS=-m64 --prefix=/usr/local \
- && make all install
+ && ./configure CC=/usr/bin/gcc CXX=/usr/bin/g++ FC=/usr/bin/gfortran CFLAGS=-m64 CXXFLAGS=-m64 FCFLAGS=-m64 --prefix=/chim/libs/openmpi/BUILD_DIR\
+ && make all install \
+ && cd ..; rm openmpi-2.0.4.tar.gz \
 
-# TODO install in BUILD_DIR
 # Build HDF5 libraries
 RUN mkdir -p /chim/libs/hdf5/BUILD_DIR
 RUN source /opt/rh/devtoolset-8/enable \
@@ -49,9 +48,9 @@ RUN source /opt/rh/devtoolset-8/enable \
  && tar -xvf hdf5-1.8.20.tar.gz \
  && cd hdf5-1.8.20 \
  && make clean \
- && ./configure CC=/usr/local/bin/mpicc FC=/usr/local/bin/mpif90 CPPFLAGS=-I/usr/local/include/openmpi LDFLAGS=-L/usr/local/lib/openmpi/ --enable-fortran --enable-parallel --prefix=/usr/local/ &> /chim/libs/build_log_hdf5_config \
+ && ./configure CC=/usr/local/bin/mpicc FC=/usr/local/bin/mpif90 CPPFLAGS=-I/usr/local/include/openmpi LDFLAGS=-L/usr/local/lib/openmpi/ --enable-fortran --enable-parallel --prefix=/chim/libs/hdf5/BUILD_DIR &> /chim/libs/build_log_hdf5_config \
  && make install &> /chim/libs/build_log_hdf5_make \
- && rm -rf /chim/libs/hdf5/BUILD_DIR
+ && cd ..; rm hdf5-1.8.20.tar.gz \
 ENV LD_LIBRARY_PATH /usr/local/lib
 
 # TODO install in BUILD_DIR
