@@ -38,9 +38,7 @@ RUN source /opt/rh/devtoolset-8/enable \
  && tar -xf openmpi-2.0.4.tar.gz \
  && cd openmpi-2.0.4 \
  && ./configure CC=/usr/bin/gcc CXX=/usr/bin/g++ FC=/usr/bin/gfortran CFLAGS=-m64 CXXFLAGS=-m64 FCFLAGS=-m64 --prefix=/usr/local \
- && make all install  \
- && cd / \
- && rm -rf /chim/libs/openmpi/BUILD_DIR
+ && make all install
 
 # TODO install in BUILD_DIR
 # Build HDF5 libraries
