@@ -52,7 +52,7 @@ RUN source /opt/rh/devtoolset-8/enable \
  && cd hdf5-1.8.20 \
  && make clean \
  && ./configure CC=/usr/local/bin/mpicc FC=/usr/local/bin/mpif90 CPPFLAGS=-I/usr/local/include/openmpi LDFLAGS=-L/usr/local/lib/openmpi/ --enable-fortran --enable-parallel --prefix=/chim/libs/hdf5/BUILD_DIR &> /chim/libs/build_log_hdf5_config \
- && make install &> /chim/libs/build_log_hdf5_make \
+ && make install \
  && cd ..; rm hdf5-1.8.20.tar.gz \
  && export LD_LIBRARY_PATH=${HDF5_LIB}/lib:${LD_LIBRARY_PATH}
 
