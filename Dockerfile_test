@@ -36,8 +36,7 @@ RUN source /opt/rh/devtoolset-8/enable
 RUN cd /chim/libs/openmpi/BUILD_DIR
 RUN curl -L -O https://download.open-mpi.org/release/open-mpi/v2.0/openmpi-2.0.4.tar.gz
 RUN tar -xf openmpi-2.0.4.tar.gz
-RUN cd openmpi-2.0.4
-RUN ls
+RUN cd /chim/libs/openmpi/BUILD_DIR/openmpi-2.0.4
 RUN ./configure CC=/usr/bin/gcc CXX=/usr/bin/g++ FC=/usr/bin/gfortran CFLAGS=-m64 CXXFLAGS=-m64 FCFLAGS=-m64 --prefix=/usr/local
 RUN make all install
 RUN cd / \
