@@ -17,20 +17,20 @@ export my_compilerCpp=/usr/bin/g++				# Path to C++ compiler
 #---------------------------------------------------------------------------------
 # 	MPI - parallel execution of chimere
 #---------------------------------------------------------------------------------
-export  my_mpiframe=openmpi  			              # implementaion of MPI norm [ ompi / ccrt ] TO REMOVE
-export  my_mpibin=/usr/local/bin    			      # Path to MPI binary directory
-export  my_mpirun=/usr/local/bin/mpirun    			# Path to mpirun to execute parallel job in MPI
-export  my_mpif90=/usr/local/bin/mpif90    			# Wrapper to my_compilerF90 to link with MPI library
-export  my_mpicc=/usr/local/bin/mpicc     			# Wrapper to my_compilerC to link with MPI library
-export  my_mpilib=/usr/local/lib/openmpi/    		# Path to MPI libraries directory
-export  my_mpiinc=/usr/local/include/openmpi    # Path to MPI include files directory
+export  my_mpiframe=openmpi  			                              # implementation of MPI norm [ ompi / ccrt ] TO REMOVE
+export  my_mpibin=/chim/libs/openmpi/BUILD_DIR/bin    			    # Path to MPI binary directory
+export  my_mpirun=/chim/libs/openmpi/BUILD_DIR/bin/mpirun    	  # Path to mpirun to execute parallel job in MPI
+export  my_mpif90=/chim/libs/openmpi/BUILD_DIR/bin/mpif90    		# Wrapper to my_compilerF90 to link with MPI library
+export  my_mpicc=/chim/libs/openmpi/BUILD_DIR/bin/mpicc         # Wrapper to my_compilerC to link with MPI library
+export  my_mpilib=/chim/libs/openmpi/BUILD_DIR/lib/openmpi    	# Path to MPI libraries directory
+export  my_mpiinc=/chim/libs/openmpi/BUILD_DIR/include/openmpi  # Path to MPI include files directory
 
 
 #---------------------------------------------------------------------------------
 # 	HDF5  - parallel version	
 #---------------------------------------------------------------------------------
-export my_hdflib=/usr/local/lib		    # Path to HDF5 parallel library directory
-export my_hdfinc=/usr/local/include		# Path to HDF5 parallel include files directory
+export my_hdflib=/chim/libs/hdf5/BUILD_DIR/lib		    # Path to HDF5 parallel library directory
+export my_hdfinc=/chim/libs/hdf5/BUILD_DIR/include		# Path to HDF5 parallel include files directory
 
 
 #---------------------------------------------------------------------------------

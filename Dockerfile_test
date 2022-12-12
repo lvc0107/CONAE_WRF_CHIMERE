@@ -39,8 +39,7 @@ RUN source /opt/rh/devtoolset-8/enable \
  && cd openmpi-2.0.4 \
  && ./configure CC=/usr/bin/gcc CXX=/usr/bin/g++ FC=/usr/bin/gfortran CFLAGS=-m64 CXXFLAGS=-m64 FCFLAGS=-m64 --prefix=/chim/libs/openmpi/BUILD_DIR\
  && make all install \
- && cd ..; rm openmpi-2.0.4.tar.gz \
- && export LD_LIBRARY_PATH=${OPENMPI_LIB}/lib:${LD_LIBRARY_PATH}
+ && cd ..; rm openmpi-2.0.4.tar.gz
 
 # Build HDF5 libraries
 RUN mkdir -p /chim/libs/hdf5/BUILD_DIR
@@ -51,7 +50,7 @@ RUN source /opt/rh/devtoolset-8/enable \
  && tar -xvf hdf5-1.8.20.tar.gz \
  && cd hdf5-1.8.20 \
  && make clean \
- && ./configure CC=/usr/local/bin/mpicc FC=/usr/local/bin/mpif90 CPPFLAGS=-I/usr/local/include/openmpi LDFLAGS=-L/usr/local/lib/openmpi/ --enable-fortran --enable-parallel --prefix=/chim/libs/hdf5/BUILD_DIR &> /chim/libs/build_log_hdf5_config \
+ && ./configure CC=/chim/libs/openmpi/BUILD_DIR/bin/mpicc FC=/chim/libs/openmpi/BUILD_DIR/bin/mpif90 CPPFLAGS=-I/chim/libs/openmpi/BUILD_DIR/include/openmpi LDFLAGS=-L/chim/libs/openmpi/BUILD_DIR/lib/openmpi --enable-fortran --enable-parallel --prefix=/chim/libs/hdf5/BUILD_DIR \
  && make install \
  && cd ..; rm hdf5-1.8.20.tar.gz \
  && export LD_LIBRARY_PATH=${HDF5_LIB}/lib:${LD_LIBRARY_PATH}
@@ -67,16 +66,16 @@ RUN source /opt/rh/devtoolset-8/enable \
  && curl -L -O https://github.com/Unidata/netcdf-fortran/archive/v4.4.4.tar.gz \
  && tar -xf v4.6.0.tar.gz \
  && cd netcdf-c-4.6.0 \
- && ./configure CC=/usr/local/bin/mpicc CPPFLAGS="-I/usr/local/include/openmpi -I/usr/local/include" LDFLAGS="-L/usr/local/lib/openmpi/ -L/usr/local/lib" --prefix=${NETCDF} &> /chim/libs/build_log_ncc_config \
- && make install &> /chim/libs/build_log_ncc_make
+ && ./configure CC=/chim/libs/openmpi/BUILD_DIR/bin/mpicc CPPFLAGS="-I/chim/libs/openmpi/BUILD_DIR/include/openmpi -I/chim/libs/hdf5/BUILD_DIR/include" LDFLAGS="-L/chim/libs/openmpi/BUILD_DIR/lib/openmpi -L/chim/libs/hdf5/BUILD_DIR/lib" --prefix=${NETCDF} \
+ && make install
 RUN source /opt/rh/devtoolset-8/enable \
  && env \
  && cd ${NETCDF}/BUILD_DIR \
  && tar -xf v4.4.4.tar.gz \
  && cd netcdf-fortran-4.4.4/ \
  && export LD_LIBRARY_PATH=${NETCDF}/lib:${LD_LIBRARY_PATH} \
- && ./configure CC=/usr/local/bin/mpicc FC=/usr/local/bin/mpif90 CPPFLAGS="-I/usr/local/include/openmpi -I/usr/local/include -I/chim/libs/netcdf/include" LDFLAGS="-L/usr/local/lib/openmpi/ -L/usr/local/lib -L/chim/libs/netcdf/lib" --prefix=${NETCDF} &> /chim/libs/build_log_ncf_config \
- && make install &> /chim/libs/build_log_ncf_make
+ && ./configure CC=/chim/libs/openmpi/BUILD_DIR/bin/mpicc FC=/chim/libs/openmpi/BUILD_DIR/bin/mpif90 CPPFLAGS="-I/chim/libs/openmpi/BUILD_DIR/include/openmpi -I/chim/libs/hdf5/BUILD_DIR/lib -I/chim/libs/netcdf/include" LDFLAGS="-L/chim/libs/openmpi/BUILD_DIR/lib/openmpi -L/chim/libs/hdf5/BUILD_DIR/lib -L/chim/libs/netcdf/lib" --prefix=${NETCDF} \
+ && make install
 
 # Build BLITZ
 COPY blitz-0.10.tar.gz  .
