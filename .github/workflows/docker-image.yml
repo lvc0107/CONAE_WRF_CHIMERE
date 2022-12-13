@@ -21,6 +21,10 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USER }}
         password: ${{ secrets.DOCKERHUB_PASS }}
     - uses: actions/checkout@v3
+      with:
+        secrets: |
+            "secret_user=${{ secrets.CHIMERE_USER }}"
+            "secret_pass=${{ secrets.CHIMERE_PASS }}"
     - name: Build the Docker image
       run: DOCKER_BUILDKIT=1 docker build -t chimere_conae:chim_user --secret id=secret_user,env=${{ secrets.CHIMERE_USER }} --secret id=secret_pass,env=${{ secrets.CHIMERE_PASS }}  . -f Dockerfile_test
       
