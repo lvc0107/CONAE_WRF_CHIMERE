@@ -41,7 +41,7 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          file: Dockerfile_test
+          file: Dockerfile
           secrets: |
             "secret_user=${{ secrets.CHIMERE_USER }}"
             "secret_pass=${{ secrets.CHIMERE_PASS }}"
