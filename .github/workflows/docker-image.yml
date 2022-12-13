@@ -29,12 +29,18 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USER }}
           password: ${{ secrets.DOCKERHUB_PASS }}
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
+        with:
+          images: lvc0107/chimere_conae
       - uses: actions/checkout@v3
       - name: Build the Docker image
         uses: docker/build-push-action@v3
         with:
           push: true
-          tags: chimere_conae
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
           file: Dockerfile_test
           secrets: |
             "secret_user=${{ secrets.CHIMERE_USER }}"
