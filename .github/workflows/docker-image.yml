@@ -17,6 +17,7 @@ jobs:
         uses: docker/setup-qemu-action@v2
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
+      
       - name: Cache Docker layers
         uses: actions/cache@v3
         with:
@@ -29,12 +30,20 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USER }}
           password: ${{ secrets.DOCKERHUB_PASS }}
+      
       - name: Extract metadata (tags, labels) for Docker
         id: meta
         uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
         with:
           images: ${{ secrets.DOCKERHUB_USER }}/chimere_conae
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            
       - uses: actions/checkout@v3
+      
       - name: Build the Docker image
         uses: docker/build-push-action@v3
         with:
@@ -51,6 +60,7 @@ jobs:
         # Temp fix
         # https://github.com/docker/build-push-action/issues/252
         # https://github.com/moby/buildkit/issues/1896
+      
       - name: Move cache
         run: |
           rm -rf /tmp/.buildx-cache
