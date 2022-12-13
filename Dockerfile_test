@@ -27,24 +27,9 @@ RUN mkdir /chim \
  &&  chown -R chimuser:chim /chim \
  &&  chmod 6755 /chim
 
-# Build the libraries with a parallel Make
-ENV J 4
-
-
-# Build CHIMERE
-COPY mychimere-gfortran .
-RUN --mount=type=secret,id=secret_user --mount=type=secret,id=secret_pass cd /chim \
-  && export CHIMERE_USER=$(cat /run/secrets/secret_user) \
-  && export CHIMERE_PASS=$(cat /run/secrets/secret_pass) \
-  && wget --no-check-certificate --user $CHIMERE_USER --password $CHIMERE_PASS https://www.lmd.polytechnique.fr/chimdata/chimere_v2020r3.tar.gz \
-  && tar -xvzf chimere_v2020r3.tar.gz  \
-  && cp ../mychimere-gfortran chimere_v2020r3/mychimere \
-  && cd chimere_v2020r3 \
-  && ./build-chimere.sh --arch gfortran &> /chim/chimere_v2020r3/build_log_chimere \
-  && ./build-wrf.sh &> /chim/chimere_v2020r3/build_log_wrf \
-  && cd /chim ; rm chimere_v2020r3.tar.gz \
-  && cd
-
+# Build the libraries with a parallel Make.
+# TODO probabbly J 4 is not working with buildx
+ENV J 1
 
 # Build OpenMPI
 RUN mkdir -p /chim/libs/openmpi/BUILD_DIR
