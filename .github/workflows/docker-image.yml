@@ -26,7 +26,7 @@ jobs:
       - name: Build the Docker image
         uses: docker/build-push-action@v3
         with:
-          tags: chimere_conae:$(date +%FT%H_%M_%S)
+          tags: chimere_conae
           file: Dockerfile_test
           secrets: |
             "secret_user=${{ secrets.CHIMERE_USER }}"
