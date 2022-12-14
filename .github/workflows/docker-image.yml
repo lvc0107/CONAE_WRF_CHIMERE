@@ -54,7 +54,7 @@ jobs:
           push: true
           tags: |
             ${{ steps.meta.outputs.tags }}
-            ${{ github.run_number }}
+            #${{ github.run_number }}
           labels: ${{ steps.meta.outputs.labels }}
           file: Dockerfile
           secrets: |
