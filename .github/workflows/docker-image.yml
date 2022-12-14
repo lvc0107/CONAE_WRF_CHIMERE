@@ -37,6 +37,7 @@ jobs:
         with:
           images: ${{ secrets.DOCKERHUB_USER }}/chimere_conae
           tags: |
+            type=ref,event=branch
             type=ref,event=pr
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
