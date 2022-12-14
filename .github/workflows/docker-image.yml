@@ -3,8 +3,6 @@ name: Docker Image CI
 on:
   push:
     branches: [ "master" ]
-    tags:
-      - 'v*'
   pull_request:
     branches: [ "master" ]
 
@@ -53,7 +51,8 @@ jobs:
           context: .
           push: true
           tags: |
-            ${{ github.run_number }}
+            ${{ steps.meta.outputs.tags }}
+            ${{ secrets.DOCKERHUB_USER }}/chimere_conae:${{ github.run_number }}
           labels: ${{ steps.meta.outputs.labels }}
           file: Dockerfile
           secrets: |
