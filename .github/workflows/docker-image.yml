@@ -32,14 +32,7 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USER }}
           password: ${{ secrets.DOCKERHUB_PASS }}
-      - name: Generate tags
-        id: docker_tags
-        uses: dnaka91/action-docker-tags@v0.1
-        with:
-          registries: |
-            docker.io
-            ghcr.io
-            quay.io
+          
       - name: Extract metadata (tags, labels) for Docker
         id: meta
         uses: docker/metadata-action@v4
@@ -60,7 +53,7 @@ jobs:
           push: true
           tags: |
             ${{ steps.meta.outputs.tags }}
-            ${{ env.IMAGE }}:${{ github.sha }}-${{ github.run_number }}
+            ${{ env.IMAGE }}.${{ github.sha }}-${{ github.run_number }}
           labels: ${{ steps.meta.outputs.labels }}
           file: Dockerfile
           secrets: |
