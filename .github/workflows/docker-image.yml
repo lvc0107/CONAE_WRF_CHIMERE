@@ -58,7 +58,9 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: |
+            ${{ steps.meta.outputs.tags }}
+            ${{ env.IMAGE }}:${{ github.sha }}-${{ github.run_number }}
           labels: ${{ steps.meta.outputs.labels }}
           file: Dockerfile
           secrets: |
