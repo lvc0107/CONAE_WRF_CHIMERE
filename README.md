@@ -31,7 +31,7 @@ Chimere and its dependencies installed in the docker image are:
 1) Get the docker image:
    1) Option 1: Get the *chimere_conae* image from docker hub (This is a public repository,
    but it's convenient for security reasons to store it in a private one, and change lvc0107 to conae_user).
-      1) `docker pull lvc0107/chimere_conae:master`
+      1) `docker pull lvc0107/chimere_conae:master` or `docker pull lvc0107/chimere_conae:<build_number>` where <build_number> identify a specific build.
       2) `mkdir -p CONAE_WRF_CHIMERE/INPUT`
       3) `mkdir -p CONAE_WRF_CHIMERE/OUTPUT`
    3) Option 2: Build the image from the source code.
@@ -43,7 +43,7 @@ Chimere and its dependencies installed in the docker image are:
          2) `export CHIMERE_PASS=****`
       4) `DOCKER_BUILDKIT=1 docker build -t chimere_conae:<new_tag> --secret id=secret_user,env=CHIMERE_USER --secret id=secret_pass,env=CHIMERE_PASS .` 
       where <new_tag> identify the latest change.
-      5) After running locally and check the tests are ok, if there is some change, push it to GitHub. This will trigger a GitHub action which builds a new docker image and pushes it to the docker hub registry
+      5) After running locally and check the tests are ok, if there is some change, push it to GitHub. This will trigger a GitHub action which builds a new docker image and pushes it to the docker hub registry.
 
 
 2) Create and enter the container:
@@ -51,7 +51,7 @@ Chimere and its dependencies installed in the docker image are:
    2) `docker run -v $(pwd)/INPUT:/chim/chim_input -v $(pwd)/OUTPUT:/chim/chim_output -it --name chimere_container lvc0107/chimere_conae /bin/tcsh`
    You can verify that Chimere, WRF and WPS have been successfully compiled by doing the following:
    3) `cat ./chimere_v2020r3/build_log*`
-   4) If there are changes on the docker container we can create a new docker image from the updated container
+   4) If there are changes on the docker container we can create a new docker image from the updated container.
    5) `TODO: COMPLETE HERE`
    6) `exit`
 
