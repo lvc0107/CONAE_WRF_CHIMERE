@@ -52,7 +52,7 @@ jobs:
           push: true
           tags: |
             ${{ steps.meta.outputs.tags }}
-            ${{ secrets.DOCKERHUB_USER }}/chimere_conae:${{ github.run_number }}
+            ${{ secrets.DOCKERHUB_USER }}/chimere_conae:v1.${{ github.run_number }}
           labels: ${{ steps.meta.outputs.labels }}
           file: Dockerfile
           secrets: |
