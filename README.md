@@ -50,6 +50,7 @@ Chimere and its dependencies installed in the docker image are:
       If the rebase process is successful, a new Github action is triggered in order to build and push the docker image 
       to the docker hub registry with a master and v1.<build_number> tags.
 
+
 3) Download from Chimere page all the required DB.
    1) `cd CONAE_WRF_CHIMERE/INPUT`
       1) get TestCase2020r3.tar.gz 
