@@ -28,8 +28,11 @@ Chimere and its dependencies installed in the docker image are:
 `docker --version`
 
 
-1) Get the docker image:
-   1) Option 1: Get the *chimere_conae* image from docker hub (This is a public repository,
+1) Set environment variables for Chimere credentials in order to download the Chimere resources. 
+   1) `export CHIMERE_USER=****`
+   2) `export CHIMERE_PASS=****`
+2) Get the docker image:
+   1) Option 1: Get the *chimere_conae* image from docker hub (This is a public repository, https://hub.docker.com/repository/docker/lvc0107/chimere_conae,
    but it's convenient for security reasons to store it in a private one, and change lvc0107 to conae_user).
       1) `docker pull lvc0107/chimere_conae:master` or `docker pull lvc0107/chimere_conae:v1.<build_number>` where <build_number> identify a specific build.
       2) `mkdir -p CONAE_WRF_CHIMERE/INPUT`
@@ -38,40 +41,51 @@ Chimere and its dependencies installed in the docker image are:
       1) `git clone git@github.com:lvc0107/CONAE_WRF_CHIMERE.git` (SSH)
          or `git clone https://github.com/lvc0107/CONAE_WRF_CHIMERE.git` (HTTPS)
       2) `cd CONAE_WRF_CHIMERE`
-      3) Set environment variables for Chimere credentials in order to download the Chimere source code.
-         1) `export CHIMERE_USER=****`
-         2) `export CHIMERE_PASS=****`
-      4) `DOCKER_BUILDKIT=1 docker build -t chimere_conae:<new_tag> --secret id=secret_user,env=CHIMERE_USER --secret id=secret_pass,env=CHIMERE_PASS .` 
+      3) `DOCKER_BUILDKIT=1 docker build -t chimere_conae:<new_tag> --secret id=secret_user,env=CHIMERE_USER --secret id=secret_pass,env=CHIMERE_PASS .` 
       where <new_tag> identify the latest change.
-      5) After running locally and checking all tests are ok, if there are any changes to any versioned file, 
+      4) After running locally and checking all tests are ok, if there are any changes over any versioned file, 
       it should be pushed to GitHub. (develop branch).This will trigger a GitHub action that creates a new docker image in 
-      the development environment. If the docker image builds successfully on the development branch, 
-      the next step is to reorganize the development branch back to the master branch via an earlier pull request process on Github.
-      If the rebase process is successful, the Github action triggers the build and push workflow and eventually pushes the docker image 
-      to the docker hub registry with a parent tag and v1.<build_number >.
+      the development environment. If the docker image is build successfully on the development branch, 
+      the next step is to rebase the development branch into the master branch via pull request process in Github.
+      If the rebase process is successful, a new Github action is triggered in order to build and push the docker image 
+      to the docker hub registry with a master and v1.<build_number> tags.
 
-
-2) Create and enter the container:
-   1) `cd CONAE_WRF_CHIMERE`
-   2) `docker run -v $(pwd)/INPUT:/chim/chim_input -v $(pwd)/OUTPUT:/chim/chim_output -it --name chimere_container lvc0107/chimere_conae /bin/tcsh`
-   You can verify that Chimere, WRF and WPS have been successfully compiled by doing the following:
-   3) `cat ./chimere_v2020r3/build_log*`
-   4) If there are changes on the docker container we can create a new docker image from the updated container.
-   5) `TODO: COMPLETE HERE`
-   6) `exit`
 
 3) Download from Chimere page all the required DB.
-   1) `cd CONAE_WRF_CHIMERE` 
-      1) get TestCase2020r3.tar.gz, `tar -xvzf TestCase2020r3.tar.gz`
-      2) get BIGFILES2020.tar.gz, `tar -xvzf BIGFILES2020.tar.gz`
-      3) get MEGAN_30s.tar.gz, `tar -xvzf MEGAN_30s.tar.gz`
-   2) Copy DB into INPUT folder. TODO COMPLETE
-   
-4) Run the model: TODO COMPLETE
+   1) `cd CONAE_WRF_CHIMERE/INPUT`
+      1) get TestCase2020r3.tar.gz 
+         1) `wget --user $CHIMERE_USER --password $CHIMERE_PASS https://www.lmd.polytechnique.fr/chimdata/TestCase2020r3.tar.gz`
+         2) `tar -xvzf TestCase2020r3.tar.gz`
+         3) `rm TestCase2020r3.tar.gz`
+      2) get BIGFILES2020.tar.gz
+         1) `wget --user $CHIMERE_USER --password $CHIMERE_PASS https://www.lmd.polytechnique.fr/chimdata/BIGFILES2020.tar.gz`
+         2) `tar -xvzf BIGFILES2020.tar.gz`
+         3) `rm BIGFILES2020.tar.gz`
+      3) get MEGAN_30s.tar.gz
+         1) `wget --user $CHIMERE_USER --password $CHIMERE_PASS https://www.lmd.polytechnique.fr/chimdata/MEGAN_30s.tar.gz`
+         2) `tar -xvzf MEGAN_30s.tar.gz`
+         3) `rm MEGAN_30s.tar.gz`
+
+4) Create chimere.par file. TODO COMPLETE 
+5) Create and enter the container:
+   1) `cd CONAE_WRF_CHIMERE`
+   2) `docker run -v $(pwd)/INPUT/BIGFILES2020:/chim/chimere_v2020r3/...<TODO COMPLETE HERE path in Chimere>/ \
+   -v $(pwd)/OUTPUT:/chim/chimere_v2020r3/...<TODO COMPLETE HERE path in Chimere> \
+   -it --name chimere_container lvc0107/chimere_conae /bin/tcsh`
+   You can verify that Chimere, WRF and WPS have been successfully compiled by doing the following:
+`cat ./chimere_v2020r3/build_log*`.
+   3) If there are changes on the docker container we can create a new docker image from the updated container.
+      1) TODO think how to keep these new changes in Github
+   4) `exit`
+
+6) Run the model: TODO COMPLETE
    1) `docker start chimere_container`
-   2) `docker exec -it chimere_container /bin/tcsh`
-   3) `./chimere_v2020r3/chimere.sh` TODO COMPLETE
-   4) Get the results from the output_chimere folder.
+   2) Copy the chimere.par file from host into the container
+      1) `cd CONAE_WRF_CHIMERE`
+      2) `docker cp chimere.par chimere_container:/chim/chimere_v2020r3/...TOOD COMPLETE this path /chimere.par`
+      3) Execute the run_simulation.sh script providing parameters
+         1) `docker exec -it chimere_container sh -c "./chimere_v2020r3/run_simulation.sh firstdate=2013061500 lastdate=2013083100 incday=5 parfile=chimere.par"`
+      4) Get the results from the output_chimere folder.
 
 # TODO 
 1) check Chimere in online mode.
