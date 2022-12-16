@@ -150,8 +150,9 @@ RUN --mount=type=secret,id=secret_user --mount=type=secret,id=secret_pass cd /ch
   && cd
 
 RUN cat /chim/chimere_v2020r3/build_log*
-RUN if ( { grep -R "Compilation OK" /chim/chimere_v2020r3/build_log_chimere } ) exit 1 ; endif
-RUN if ( { grep -R "Compilation Success" /chim/chimere_v2020r3/build_log_wrf } ) exit 1 ; endif
+RUN if ! grep -qF "Compilation OK" /chim/chimere_v2020r3/build_log_chimere ; then false;  fi
+RUN if ! grep -qF "Compilation Success" /chim/chimere_v2020r3/build_log_wrf ; then false;  fi
+
 
 RUN mkdir -p /chim/chim_input /chim/chim_output \
  &&  chmod 6755 /chim /chim/chim_input /chim/chim_output /usr/local
