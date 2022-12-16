@@ -3,7 +3,7 @@
 ### This docker image is based on
 https://www.lmd.polytechnique.fr/chimere/docs/CHIMEREdoc_v2020r3.pdf
 
-TODO: UNFORK this repository by doing
+TODO: UNFORK this repository by doing (Since we are not using WRF implemented by NCAR)
 https://stackoverflow.com/questions/29326767/unfork-a-github-fork-without-deleting/41486339#41486339
 
 
@@ -31,10 +31,10 @@ Chimere and its dependencies installed in the docker image are:
 1) Get the docker image:
    1) Option 1: Get the *chimere_conae* image from docker hub (This is a public repository,
    but it's convenient for security reasons to store it in a private one, and change lvc0107 to conae_user).
-      1) `docker pull lvc0107/chimere_conae:master` or `docker pull lvc0107/chimere_conae:<build_number>` where <build_number> identify a specific build.
+      1) `docker pull lvc0107/chimere_conae:master` or `docker pull lvc0107/chimere_conae:v1.<build_number>` where <build_number> identify a specific build.
       2) `mkdir -p CONAE_WRF_CHIMERE/INPUT`
       3) `mkdir -p CONAE_WRF_CHIMERE/OUTPUT`
-   3) Option 2: Build the image from the source code.
+   2) Option 2: Build the image from the source code.
       1) `git clone git@github.com:lvc0107/CONAE_WRF_CHIMERE.git` (SSH)
          or `git clone https://github.com/lvc0107/CONAE_WRF_CHIMERE.git` (HTTPS)
       2) `cd CONAE_WRF_CHIMERE`
@@ -43,7 +43,12 @@ Chimere and its dependencies installed in the docker image are:
          2) `export CHIMERE_PASS=****`
       4) `DOCKER_BUILDKIT=1 docker build -t chimere_conae:<new_tag> --secret id=secret_user,env=CHIMERE_USER --secret id=secret_pass,env=CHIMERE_PASS .` 
       where <new_tag> identify the latest change.
-      5) After running locally and check the tests are ok, if there is some change, push it to GitHub. This will trigger a GitHub action which builds a new docker image and pushes it to the docker hub registry.
+      5) After running locally and checking all tests are ok, if there are any changes to any versioned file, 
+      it should be pushed to GitHub. (develop branch).This will trigger a GitHub action that creates a new docker image in 
+      the development environment. If the docker image builds successfully on the development branch, 
+      the next step is to reorganize the development branch back to the master branch via an earlier pull request process on Github.
+      If the rebase process is successful, the Github action triggers the build and push workflow and eventually pushes the docker image 
+      to the docker hub registry with a parent tag and v1.<build_number >.
 
 
 2) Create and enter the container:
