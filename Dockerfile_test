@@ -28,7 +28,7 @@ RUN mkdir /chim \
  &&  chmod 6755 /chim
 
 # Build the libraries with a parallel Make.
-# TODO probabbly J 4 is not working with buildx
+# TODO probably J 4 is not working with buildx
 ENV J 1
 
 # Build OpenMPI
@@ -149,6 +149,13 @@ RUN --mount=type=secret,id=secret_user --mount=type=secret,id=secret_pass cd /ch
   && cd /chim ; rm chimere_v2020r3.tar.gz \
   && cd
 
+RUN cat /chim/chimere_v2020r3/build_log*
+RUN if ( { grep -R "Compilation OK" /chim/chimere_v2020r3/build_log_chimere } ) exit 1 ; endif
+RUN if ( { grep -R "Compilation Success" /chim/chimere_v2020r3/build_log_wrf } ) exit 1 ; endif
+
+RUN mkdir -p /chim/chim_input /chim/chim_output \
+ &&  chmod 6755 /chim /chim/chim_input /chim/chim_output /usr/local
+
 
 # TODO REVIEW these commands
 RUN mkdir -p /var/run/sshd \
@@ -156,11 +163,6 @@ RUN mkdir -p /var/run/sshd \
     && sed -i 's/#PermitRootLogin yes/PermitRootLogin yes/g' /etc/ssh/sshd_config \
     && sed -i 's/#RSAAuthentication yes/RSAAuthentication yes/g' /etc/ssh/sshd_config \
     && sed -i 's/#PubkeyAuthentication yes/PubkeyAuthentication yes/g' /etc/ssh/sshd_config
-
-
-RUN mkdir -p /chim/chim_input /chim/chim_output \
- &&  chmod 6755 /chim /chim/chim_input /chim/chim_output /usr/local
-
 
 # TODO REVIEW these commands
 # Set environment for interactive container shells
