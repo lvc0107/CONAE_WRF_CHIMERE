@@ -153,6 +153,7 @@ RUN cat /chim/chimere_v2020r3/build_log*
 RUN if ! grep -qF "Compilation OK" /chim/chimere_v2020r3/build_log_chimere ; then false;  fi
 RUN if ! grep -qF "Compilation Success" /chim/chimere_v2020r3/build_log_wrf ; then false;  fi
 
+COPY run_simulation.sh /chim/chimere_v2020r3/ && chmod +x /chim/chimere_v2020r3/run_simulation.sh
 
 RUN mkdir -p /chim/chim_input /chim/chim_output \
  &&  chmod 6755 /chim /chim/chim_input /chim/chim_output /usr/local
