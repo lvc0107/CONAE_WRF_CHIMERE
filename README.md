@@ -50,8 +50,13 @@ Chimere and its dependencies installed in the docker image are:
       If the rebase process is successful, a new Github action is triggered in order to build and push the docker image 
       to the docker hub registry with a master and v1.<build_number> tags.
 
-
-3) Download from Chimere page all the required DB.
+3) Download the emiSURF anthropogenic emissions pre-processor
+   1) get emiSURF2020r4.tar.gz
+      1) `wget --user $CHIMERE_USER --password $CHIMERE_PASS https://www.lmd.polytechnique.fr/chimdata/emisurf2020r4.tar.gz`
+      2) `tar -xvzf emisurf2020r4.tar.gz`
+      3) `rm emisurf2020r4.tar.gz`
+         
+4) Download from Chimere page all the required DB.
    1) `cd CONAE_WRF_CHIMERE/INPUT`
       1) get TestCase2020r3.tar.gz 
          1) `wget --user $CHIMERE_USER --password $CHIMERE_PASS https://www.lmd.polytechnique.fr/chimdata/TestCase2020r3.tar.gz`
@@ -65,9 +70,13 @@ Chimere and its dependencies installed in the docker image are:
          1) `wget --user $CHIMERE_USER --password $CHIMERE_PASS https://www.lmd.polytechnique.fr/chimdata/MEGAN_30s.tar.gz`
          2) `tar -xvzf MEGAN_30s.tar.gz`
          3) `rm MEGAN_30s.tar.gz`
-
-4) Create chimere.par file. TODO COMPLETE 
-5) Create and enter the container:
+      4) get databases for emiSURF
+         1) `wget --user $CHIMERE_USER --password $CHIMERE_PASS https://www.lmd.polytechnique.fr/chimdata/emisurf_data.tar.gz`
+         2) `tar -xvzf emisurf_data.tar.gz`
+         3) `rm emisurf_data.tar.gz`
+        
+5) Create chimere.par file. TODO COMPLETE 
+6) Create and enter the container:
    1) `cd CONAE_WRF_CHIMERE`
    2) `docker run -v $(pwd)/INPUT/BIGFILES2020:/chim/chimere_v2020r3/...<TODO COMPLETE HERE path in Chimere>/ \
    -v $(pwd)/OUTPUT:/chim/chimere_v2020r3/...<TODO COMPLETE HERE path in Chimere> \
@@ -78,7 +87,7 @@ Chimere and its dependencies installed in the docker image are:
       1) TODO think how to keep these new changes in Github
    4) `exit`
 
-6) Run the model: TODO COMPLETE
+7) Run the model: TODO COMPLETE
    1) `docker start chimere_container`
    2) Copy the chimere.par file from host into the container
       1) `cd CONAE_WRF_CHIMERE`
