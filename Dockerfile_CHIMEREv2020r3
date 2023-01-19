@@ -27,8 +27,7 @@ RUN mkdir /chim \
  &&  chmod 6755 /chim
 
 # Build the libraries with a parallel Make.
-# TODO probably J 4 is not working with buildx
-ENV J 1
+ENV J 4
 
 # Build OpenMPI
 RUN mkdir -p /chim/libs/openmpi/BUILD_DIR
@@ -78,8 +77,8 @@ RUN source /opt/rh/devtoolset-8/enable \
  && make install
 
 # Build BLITZ
-COPY blitz-0.10.tar.gz  .
 RUN mkdir -p /chim/libs/blitz/BUILD_DIR  \
+  && wget https://sourceforge.net/projects/blitz/files/latest/download/blitz-0.10.tar.gz \
   && cp blitz-0.10.tar.gz /chim/libs/blitz \
   && cd /chim/libs/blitz \
   && tar -xvzf blitz-0.10.tar.gz  \
@@ -92,8 +91,8 @@ RUN mkdir -p /chim/libs/blitz/BUILD_DIR  \
   && cd
 
 # Build JASPER
-COPY jasper-1.900.1.zip  .
 RUN mkdir -p /chim/libs/jasper/BUILD_DIR  \
+  && wget http://www.ece.uvic.ca/\~mdadams/jasper/software/jasper-1.900.1.zip \
   && cp jasper-1.900.1.zip /chim/libs/jasper \
   && cd /chim/libs/jasper \
   && unzip jasper-1.900.1.zip \
@@ -106,8 +105,8 @@ RUN mkdir -p /chim/libs/jasper/BUILD_DIR  \
   && cd
 
 # Build CMAKE
-COPY cmake-3.13.4.tar.gz .
 RUN mkdir -p /chim/libs/cmake/BUILD_DIR  \
+  && wget https://github.com/Kitware/CMake/releases/download/v3.13.4/cmake-3.13.4.tar.gz \
   && cp cmake-3.13.4.tar.gz /chim/libs/cmake \
   && cd /chim/libs/cmake \
   && tar -xvzf cmake-3.13.4.tar.gz \
@@ -119,8 +118,8 @@ RUN mkdir -p /chim/libs/cmake/BUILD_DIR  \
   && cd
 
 # Build ECCODES
-COPY eccodes-2.19.1-Source.tar.gz .
 RUN mkdir -p /chim/libs/eccodes/BUILD_DIR  \
+  && wget https://confluence.ecmwf.int/download/attachments/45757960/eccodes-2.19.1-Source.tar.gz \
   && cp eccodes-2.19.1-Source.tar.gz /chim/libs/eccodes \
   && cd /chim/libs/eccodes \
   && tar -xvzf eccodes-2.19.1-Source.tar.gz \
